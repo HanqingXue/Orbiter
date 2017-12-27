@@ -66,23 +66,23 @@ var d3Graphs = {
 	},
 	initGraphs: function() {
 		this.showHud();
-		this.drawBarGraph();
-		this.drawHistogram();
+		//this.drawBarGraph();
+		//this.drawHistogram();
 	},
 	showHud: function() {
 		if(this.inited) return;
 		this.inited = true;
-		$("#hudHeader .title").text(dict['_title']);
+		$("#hudHeader .title").text("Missile Tracker");
 		$("#hudHeader .subtitle").text(dict['_subtitle']);
 		$("#hudButtons .searchBtn").val(dict['search'].toUpperCase());
-		$("#hudButtons .aboutBtn").val(dict['about'].toUpperCase());
-		$("#history .graph .labels .outcome").text(dict['test-outcome'].toUpperCase());
+		$("#hudButtons .aboutBtn").val("INPUT");
+		/*$("#history .graph .labels .outcome").text(dict['test-outcome'].toUpperCase());
 		$("#history .graph .labels .successes").text(dict['success'].toUpperCase());
 		$("#history .graph .labels .failures").text(dict['failure'].toUpperCase());
 		$("#history .graph .labels .unknowns").text(dict['unknown'].toUpperCase());
 		$("#outcomeBtns .success .label").text(dict['success']);
 		$("#outcomeBtns .failure .label").text(dict['failure']);
-		$("#outcomeBtns .unknown .label").text(dict['unknown']);
+		$("#outcomeBtns .unknown .label").text(dict['unknown']);*/
 		for (var i in missileLookup) {
 			$("#missileTypeBtns ." + i + " .label").text(missileLookup[i].name);
 		}
@@ -93,7 +93,7 @@ var d3Graphs = {
 		$("#hudButtons").show();
 		$("#outcomeBtns").show();
 		$("#missileTypeBtns").show();
-		$("#history").show();
+		$("#history").hide();
 		$("#graphIcon").show();
 		$("#graphIcon").on('click', d3Graphs.graphIconClick);
 		$("#history .close").on('click', d3Graphs.closeHistogram);
@@ -203,7 +203,8 @@ var d3Graphs = {
 		var hudPaddingRight = 30;
 		$("#hudHeader").width(w-hudHeaderLeft - hudPaddingRight);
 		*/
-		d3Graphs.drawBarGraph();
+		//success
+		//d3Graphs.drawBarGraph();
 		d3Graphs.drawHistogram();
 		d3Graphs.setHandlePosition(d3Graphs.selectedYearIndex);
 		$("#handle").draggable({
@@ -527,7 +528,7 @@ var d3Graphs = {
 		$("#handle").css('left', leftPos + "px");
 		d3Graphs.selectedYearIndex = index;
 	},
-	drawBarGraph: function() {
+	/*drawBarGraph: function() {
 		this.barGraphSVG
 			.attr('id', 'barGraph')
 			.attr('width', d3Graphs.barGraphWidth)
@@ -818,7 +819,7 @@ var d3Graphs = {
 			.merge(unknownLabel).transition()
 			.attr('y', this.barGraphHeight - this.barGraphBottomPadding + 45)
 			.attr('opacity', unknownVisible ? 1 : 0);
-	},
+	},*/
 	dragHandleStart: function(event) {
 		console.log('start');
 		event.dataTransfer.setData('text/uri-list','images/yearHandle.png');

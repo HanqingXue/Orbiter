@@ -54,7 +54,7 @@ function attachMarkerToTest( testName ){
 	};
 
 	marker.updatePosition = function(){
-		this.style.left = this.labelLeft + 'px';
+		/*this.style.left = this.labelLeft + 'px';
 		this.style.top = this._y + this._dy - (this.selected ? 27 : camera.zoom * 2 + 4) + 'px';
 		this.style.zIndex = this._z;
 
@@ -63,7 +63,7 @@ function attachMarkerToTest( testName ){
 		positionArray[1] = this._y;
 		positionArray[3] = this._x + (this.onLeft ? -48 : 48);
 		positionArray[4] = this._y + this._dy;
-		this.line.geometry.attributes.position.needsUpdate = true;
+		this.line.geometry.attributes.position.needsUpdate = true;*/
 	};
 
 	marker.setVisible = function( vis ){
@@ -78,10 +78,10 @@ function attachMarkerToTest( testName ){
 	};
 	var testLayer = marker.querySelector( '#testText');
 	marker.testLayer = testLayer;
-	var detailLayer = marker.querySelector( '#detailText' );
-	marker.detailLayer = detailLayer;
-	var descriptionLayer = marker.querySelector( '#descriptionText' );
-	marker.descriptionLayer = descriptionLayer;
+	//var detailLayer = marker.querySelector( '#detailText' );
+	//marker.detailLayer = detailLayer;
+	//var descriptionLayer = marker.querySelector( '#descriptionText' );
+	//marker.descriptionLayer = descriptionLayer;
 	marker.jquery = $(marker);
 	marker.setSize = function( s ){
 		this.style.fontSize = s + 'pt';
@@ -107,11 +107,11 @@ function attachMarkerToTest( testName ){
 		this.setPosition( screenPos.x, screenPos.y, zIndex );
 	};
 
-	var nameLayer = marker.querySelector( '#testText' );
+	//var nameLayer = marker.querySelector( '#testText' );
 
-	nameLayer.innerHTML = testName.replace(' ','&nbsp;');
+	//nameLayer.innerHTML = testName.replace(' ','&nbsp;');
 
-	var detailText = '';
+	/*var detailText = '';
 	detailText += '<span class="key">' + dict['date'] + ':</span>&nbsp;' + datetime + '&nbsp;&nbsp;' +
 		'<span class="key">' + dict['test-outcome'] + ':</span>&nbsp;' + dict[test.outcome] + '<br />' +
 		'<span class="key">' + dict['missile-name'] + ':</span>&nbsp;' + missile.name + '&nbsp;&nbsp;' +
@@ -120,10 +120,10 @@ function attachMarkerToTest( testName ){
 		'<span class="key">' + dict['landing-location'] + ':</span>&nbsp;' + dict[test.landingLocation.name] + '<br />' +
 		'<span class="key">' + dict['apogee'] + ':</span>&nbsp;' + apogee + '&nbsp;&nbsp;' +
 		'<span class="key">' + dict['distance-travelled'] + ':</span>&nbsp;' + distance;
-	marker.detailText = detailText;
+	marker.detailText = detailText;*/
 
-	var descriptionText = '<span class="key">' + dict['description'] + ':</span>&nbsp;' + test.description;
-	marker.descriptionText = descriptionText;
+	/*var descriptionText = '<span class="key">' + dict['description'] + ':</span>&nbsp;' + test.description;
+	marker.descriptionText = descriptionText;*/
 
 
 	var markerOver = function(e){
@@ -140,10 +140,10 @@ function attachMarkerToTest( testName ){
 
 	if( marker.selected ) {
 		marker.classList.add('selected');
-		detailLayer.innerHTML = detailText;
-		detailLayer.style.display = 'block';
-		descriptionLayer.innerHTML = descriptionText;
-		descriptionLayer.style.display = 'block';
+		//detailLayer.innerHTML = detailText;
+		//detailLayer.style.display = 'block';
+		//descriptionLayer.innerHTML = descriptionText;
+		//descriptionLayer.style.display = 'block';
 	}
 	else{
 		marker.addEventListener( 'mouseover', markerOver, false );

@@ -62,9 +62,9 @@ var Selection = function(selectedYear, selectedTest) {
 	this.selectedTest = selectedTest;
 
 	this.outcomeCategories = new Object();
-	for (var i in outcomeLookup) {
+	/*for (var i in outcomeLookup) {
 		this.outcomeCategories[i] = true;
-	}
+	}*/
 	this.missileCategories = new Object();
 	for (var i in missileLookup) {
 		this.missileCategories[i] = true;

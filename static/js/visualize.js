@@ -151,13 +151,14 @@ function buildDataVizGeometries( linearData ){
 function selectVisualization( linearData, year, tests, outcomeCategories, missileCategories ){
 	//	we're only doing one test for now so...
 	var cName = tests[0].toUpperCase();
+	console.log(cName);
 
-	$("#hudButtons .testTextInput").val(cName);
+	//$("#hudButtons .testTextInput").val(cName);
 	previouslySelectedTest = selectedTest;
 	selectedTest = testData[tests[0].toUpperCase()];
 
 	summary = {
-		success: {
+		/*success: {
 			total: 0
 		},
 		failure: {
@@ -165,16 +166,16 @@ function selectVisualization( linearData, year, tests, outcomeCategories, missil
 		},
 		unknown: {
 			total: 0
-		},
+		},*/
 		total: 0,
 		max: 0,
 		historical: getHistoricalData()
 	};
-	for( var i in missileLookup ){
+	/*for( var i in missileLookup ){
 		summary.success[i] = 0;
 		summary.failure[i] = 0;
 		summary.unknown[i] = 0;
-	}
+	}*/
 
 	// console.log(selectedTest);
 
@@ -201,7 +202,7 @@ function selectVisualization( linearData, year, tests, outcomeCategories, missil
 		var testName = mesh.affectedTests[i];
 		var test = testData[testName];
 		attachMarkerToTest( testName );
-	}
+	} 
 
 	if( previouslySelectedTest !== selectedTest ){
 		if( selectedTest ){
