@@ -18,7 +18,6 @@
 		<script src="{{ static_url('js/geopins.js') }}"></script>
 		<script src="{{ static_url('js/visualize.js') }}"></script>
 		<script src="{{ static_url('js/visualize_lines.js') }}"></script>
-		<script src="{{ static_url('js/markers.js') }}"></script>
 		<script src="{{ static_url('js/d3-4.11.0.min.js') }}"></script>
 		<script src="{{ static_url('js/ui.controls.js') }}"></script>
 		<script src="{{ static_url('js/hammer-2.0.8.min.js') }}"></script>
@@ -346,8 +345,6 @@
 	//	pick out the year first from the data
 	var indexFromYear = yearIndexLookup[year];
 
-	var affectedTest = [];
-
 	var bin = linearData[indexFromYear].data;
 
 	var linesGeo = new THREE.Geometry();
@@ -412,22 +409,6 @@
 				}
 			}
 
-			affectedTest.push(set.testName);
-
-			/*if( set.outcome === 'success' ){
-				summary.success[set.missile]++;
-				summary.success.total++;
-			}
-			else if( set.outcome === 'failure' ){
-				summary.failure[set.missile]++;
-				summary.failure.total++;
-			}
-			else {
-				summary.unknown[set.missile]++;
-				summary.unknown.total++;
-			}*/
-
-			//summary.total++;
 
 		}
 	}
@@ -435,6 +416,8 @@
 	// console.log(selectedTest);
 
 	linesGeo.colors = lineColors;
+	console.log('lineColors');
+	console.log(lineColors);
 
 	//	make a final mesh out of this composite
 	var splineOutline = new THREE.Line( linesGeo, new THREE.LineBasicMaterial(
@@ -510,7 +493,6 @@
 	};
 
 	//	return this info as part of the mesh package, we'll use this in selectvisualization
-	splineOutline.affectedTests = affectedTest;
 
 
 	return splineOutline;

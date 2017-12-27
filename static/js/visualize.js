@@ -1,4 +1,12 @@
+/**
+🈶初始的经纬度，方位角，距离计算落点
+**/
+
+
 function landingLatLon(lat, lon, bearing, distance) {
+	console.log('bearing:');
+	console.log(bearing);
+	console.log(distance)
 	var a = 6378137.06; // radius at equator
 
 	var phi1 = lat * Math.PI / 180;
@@ -16,6 +24,9 @@ function landingLatLon(lat, lon, bearing, distance) {
 }
 
 // For best precision
+/**
+	由球面坐标反推另一个点
+	*/
 function vincenty(lat, lon, bearing, distance) {
 	var a = 6378137.06; // radius at equator
 	var f = 1/298.257223563; // flattening of the ellipsoid
@@ -79,6 +90,7 @@ function buildDataVizGeometries( linearData ){
 
 	for( var i in linearData ){
 		var yearBin = linearData[i].data;
+
 
 		var year = linearData[i].year;
 		yearIndexLookup[year] = i;
@@ -151,9 +163,7 @@ function buildDataVizGeometries( linearData ){
 function selectVisualization( linearData, year, tests, outcomeCategories, missileCategories ){
 	//	we're only doing one test for now so...
 	var cName = tests[0].toUpperCase();
-	console.log(cName);
 
-	//$("#hudButtons .testTextInput").val(cName);
 	previouslySelectedTest = selectedTest;
 	selectedTest = testData[tests[0].toUpperCase()];
 
@@ -169,20 +179,9 @@ function selectVisualization( linearData, year, tests, outcomeCategories, missil
 		},*/
 		total: 0,
 		max: 0,
-		historical: getHistoricalData()
 	};
-	/*for( var i in missileLookup ){
-		summary.success[i] = 0;
-		summary.failure[i] = 0;
-		summary.unknown[i] = 0;
-	}*/
 
-	// console.log(selectedTest);
 
-	//	clear markers
-	for( var i in selectableTests ){
-		removeMarkerFromTest( selectableTests[i] );
-	}
 
 	//	clear children
 	while( visualizationMesh.children.length > 0 ){
@@ -201,7 +200,7 @@ function selectVisualization( linearData, year, tests, outcomeCategories, missil
 	for( var i in mesh.affectedTests ){
 		var testName = mesh.affectedTests[i];
 		var test = testData[testName];
-		attachMarkerToTest( testName );
+		//attachMarkerToTest( testName );
 	} 
 
 	if( previouslySelectedTest !== selectedTest ){
@@ -225,13 +224,7 @@ function selectVisualization( linearData, year, tests, outcomeCategories, missil
 				piCounter++;
 				rotateTargetY = wrap(targetY0, -Math.PI, Math.PI);
 			}
-			// console.log(rotateTargetY);
-			//lines commented below source of rotation error
-			//is there a more reliable way to ensure we don't rotate around the globe too much?
-			/*
-			if( Math.abs(rotateTargetY - rotating.rotation.y) > Math.PI )
-				rotateTargetY += Math.PI;
-			*/
+
 			rotateVX *= 0.6;
 			rotateVY *= 0.6;
 

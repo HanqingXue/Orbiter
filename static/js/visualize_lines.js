@@ -1,7 +1,8 @@
 var globeRadius = 100;
 var vec3_origin = new THREE.Vector3(0,0,0);
 
-function makeConnectionLineGeometry( facility, landing, apogee ){
+function makeConnectionLineGeometry
+( facility, landing, apogee ){
 	if( facility.center === undefined || landing.center == undefined )
 		return undefined;
 
@@ -72,8 +73,10 @@ function makeConnectionLineGeometry( facility, landing, apogee ){
 
 	//	add one final point to the center of the earth
 	//	we need this for drawing multiple arcs, but piled into one geometry buffer
-	points.push( vec3_origin );
+	
+	//points.push( vec3_origin );
 
+	console.log( points );
 	//	create a line geometry out of these
 	var curveGeometry = createLineGeometry( points );
 

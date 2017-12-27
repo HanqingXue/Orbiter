@@ -123,8 +123,6 @@ function initScene() {
 
 	var outlinedMapTexture = new THREE.Texture( mapOutlineImage );
 	outlinedMapTexture.needsUpdate = true;
-	// outlinedMapTexture.magFilter = THREE.NearestFilter;
-	// outlinedMapTexture.minFilter = THREE.NearestFilter;
 
 	var mapMaterial = new THREE.MeshBasicMaterial({
 		map: outlinedMapTexture,
@@ -142,6 +140,9 @@ function initScene() {
 	sphere.rotation.z = Math.PI;
 	sphere.id = "base";
 	rotating.add( sphere );
+
+
+
 
 
 	var wireframeGeo = new THREE.EdgesGeometry(sphere.geometry, 0.3);
@@ -163,19 +164,6 @@ function initScene() {
 	atmosphere.scale.x = atmosphere.scale.y = atmosphere.scale.z = 1.8;
 	rotating.add(atmosphere);
 
-	for( var i in timeBins ){
-		var bin = timeBins[i].data;
-		for( var s in bin ){
-			var set = bin[s];
-
-			var seriesPostfix = set.series ? ' [' + set.series + ']' : '';
-			var testName = (set.date + ' ' + missileLookup[set.missile].name + seriesPostfix).toUpperCase();
-
-			selectableTests.push( testName );
-		}
-	}
-
-	console.log( selectableTests );
 
 	// load geo data (facility lat lons in this case)
 	console.time('loadGeoData');
@@ -352,7 +340,6 @@ function animate() {
 		}
 	});
 
-	updateMarkers();
 	render2d();
 }
 
@@ -363,37 +350,4 @@ function render() {
 
 function render2d() {
 	renderer.render( scene2d, camera2d );
-}
-
-function getHistoricalData() {
-	var history = [];
-
-	var outcomeCategories = selectionData.getOutcomeCategories();
-	var missileCategories = selectionData.getMissileCategories();
-
-	for( var i in timeBins ){
-		var yearBin = timeBins[i].data;
-		var value = {successes: 0, failures:0, unknowns:0};
-		for( var s in yearBin ){
-			var set = yearBin[s];
-			var outcomeName = set.outcome;
-			var missileName = set.missile;
-
-			var relevantCategory = ( $.inArray(outcomeName, outcomeCategories ) >= 0 ) &&
-								   ( $.inArray(missileName, missileCategories ) >= 0 );
-
-			if( relevantCategory == false )
-				continue;
-
-			if( outcomeName === 'success' )
-				value.successes++;
-			else if( outcomeName === 'failure' )
-				value.failures++;
-			else
-				value.unknowns++;
-		}
-		history.push(value);
-	}
-	// console.log(history);
-	return history;
 }
