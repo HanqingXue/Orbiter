@@ -4,9 +4,6 @@
 
 
 function landingLatLon(lat, lon, bearing, distance) {
-	console.log('bearing:');
-	console.log(bearing);
-	console.log(distance)
 	var a = 6378137.06; // radius at equator
 
 	var phi1 = lat * Math.PI / 180;
@@ -28,6 +25,7 @@ function landingLatLon(lat, lon, bearing, distance) {
 	由球面坐标反推另一个点
 	*/
 function vincenty(lat, lon, bearing, distance) {
+	//console.log();
 	var a = 6378137.06; // radius at equator
 	var f = 1/298.257223563; // flattening of the ellipsoid
 	var b = (1 - f) * a; // radius at the poles
@@ -167,28 +165,19 @@ function selectVisualization( linearData, year, tests, outcomeCategories, missil
 	previouslySelectedTest = selectedTest;
 	selectedTest = testData[tests[0].toUpperCase()];
 
-	summary = {
-		/*success: {
-			total: 0
-		},
-		failure: {
-			total: 0
-		},
-		unknown: {
-			total: 0
-		},*/
-		total: 0,
-		max: 0,
-	};
-
 
 
 	//	clear children
+	/**
+	清楚所有的已有轨迹
+	**/
 	while( visualizationMesh.children.length > 0 ){
 		var c = visualizationMesh.children[0];
 		visualizationMesh.remove(c);
 	}
 
+
+    // 核心代码
 	//	build the mesh
 	console.time('getVisualizedMesh');
 	var mesh = getVisualizedMesh( timeBins, year, outcomeCategories, missileCategories );
@@ -197,12 +186,10 @@ function selectVisualization( linearData, year, tests, outcomeCategories, missil
 	//	add it to scene graph
 	visualizationMesh.add( mesh );
 
-	for( var i in mesh.affectedTests ){
-		var testName = mesh.affectedTests[i];
-		var test = testData[testName];
-		//attachMarkerToTest( testName );
-	} 
 
+	/**
+	这段代码和加载中心有关和绘图无关
+	**/
 	if( previouslySelectedTest !== selectedTest ){
 		if( selectedTest ){
 			var facility = facilityData[selectedTest.facility];

@@ -70,13 +70,11 @@ function makeConnectionLineGeometry
 	points = points.splice(0,points.length-1);
 
 	points = points.concat( splineCurveB.getPoints( vertexCountDesired ) );
-
 	//	add one final point to the center of the earth
 	//	we need this for drawing multiple arcs, but piled into one geometry buffer
 	
 	//points.push( vec3_origin );
 
-	console.log( points );
 	//	create a line geometry out of these
 	var curveGeometry = createLineGeometry( points );
 

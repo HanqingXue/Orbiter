@@ -1,8 +1,6 @@
 function loadGeoData( latlonData ){
 	//	-----------------------------------------------------------------------------
 	//	Load the world geo data json, per facility
-	console.log('In loadGeoData');
-	console.log(latlonData)
 	var sphereRad = 1;
 	var rad = 100;
 

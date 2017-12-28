@@ -27,35 +27,6 @@ function loadLangCSS(lang) {
 	}
 }
 
-//	TODO
-//	use underscore and ".after" to load these in order
-//	don't look at me I'm ugly
-/*function start(e) {
-	//	detect for webgl and reject everything else
-	if (!Detector.webgl) {
-		Detector.addGetWebGLMessage();
-	} else {
-		loadLangCSS(lang);
-		//	ensure the map images are loaded first!!
-		mapOutlineImage = new Image();
-		mapOutlineImage.src = "map_outline.png";
-		mapOutlineImage.onload = function() {
-			loadDictData(function() {
-				document.title = dict['_title'];
-				loadFacilityData(function() {
-					loadMissileData(function() {
-						loadTestData(function() {
-							initScene();
-							animate();
-						});
-					});
-				});
-			});
-		};
-	};
-}*/
-
-
 
 var Selection = function(selectedYear, selectedTest) {
 	this.selectedYear = selectedYear;
@@ -134,17 +105,16 @@ function initScene() {
 
 	//	-----------------------------------------------------------------------------
 	sphere = new THREE.Mesh( new THREE.SphereBufferGeometry( 100, 40, 40 ), mapMaterial );
+	console.log(sphere.ce);
 	sphere.doubleSided = false;
 	sphere.rotation.x = Math.PI;
 	sphere.rotation.y = -Math.PI/2;
 	sphere.rotation.z = Math.PI;
 	sphere.id = "base";
 	rotating.add( sphere );
-
-
-
-
-
+    /***
+	 确定所有的经线和维线
+    **/
 	var wireframeGeo = new THREE.EdgesGeometry(sphere.geometry, 0.3);
 	var wireframeMaterial = new THREE.LineBasicMaterial({
 		color: Math.random() * 0xffffff,
@@ -152,6 +122,7 @@ function initScene() {
 	});
 	var wireframe = new THREE.LineSegments(wireframeGeo, wireframeMaterial);
 	sphere.add(wireframe);
+
 
 	var atmosphereMaterial = new THREE.ShaderMaterial({
 		vertexShader: document.getElementById('vertexShaderAtmosphere').textContent,
@@ -184,6 +155,7 @@ function initScene() {
 	var selectedTestName = latestTest.testName;
 
 	selectionData = new Selection(selectedYear, selectedTestName);
+
 
 	selectVisualization(timeBins, selectedYear, [selectedTestName], Object.keys(outcomeLookup), Object.keys(missileLookup));
 
@@ -247,7 +219,18 @@ function initScene() {
 	camera2d.position.y = 0;
 	camera.lookAt(scene2d.position);
 
+	var material_test = new THREE.LineBasicMaterial({color:0xffffff});
+	var geometry_test = new THREE.Geometry();
+	geometry_test.vertices.push(new THREE.Vector3(69.58852692416501, 63.31377323036632, -33.89399710654544));
+    geometry_test.vertices.push(new THREE.Vector3(81.97288209190206, 85.46188382003189, -56.7228754279934));
+    //geometry_test.vertices.push(new THREE.Vector3(0,5,0));
+
+    var line_test = new THREE.Line(geometry_test, material_test);
+    scene.add(line_test); 
+
 	var windowResize = THREEx.WindowResize(renderer, camera, camera2d);
+
+
 }
 
 
@@ -344,6 +327,8 @@ function animate() {
 }
 
 function render() {
+
+
 	renderer.clear();
 	renderer.render( scene, camera );
 }

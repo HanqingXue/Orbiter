@@ -326,7 +326,6 @@
 			timeBins = JSON.parse( xhr.responseText ).timeBins;
 
 			maxValue = 0;
-			// console.log(timeBins);
 
 			startTime = timeBins[0].year;
 			endTime = timeBins[timeBins.length - 1].year;
@@ -350,16 +349,22 @@
 	var linesGeo = new THREE.Geometry();
 	var lineColors = [];
 
+	/*
 	var particlesGeo = new THREE.BufferGeometry();
 	var particlePositions = [];
 	var particleSizes = [];
 	var particleColors = [];
 
+
 	particlesGeo.vertices = [];
+	**/
 
 	//	go through the data from year, and find all relevant geometries
 	for( i in bin ){
 		var set = bin[i];
+		console.log('((');
+		console.log(set.lineGeometry);
+		console.log('))');
 
 		var relevantOutcomeCategory = $.inArray(set.outcome, outcomeCategories) >= 0;
 		var relevantMissileCategory = $.inArray(set.missile, missileCategories) >= 0;
@@ -372,7 +377,7 @@
 			var lineColor = new THREE.Color(missileColors[set.missile]);
 
 			var lastColor;
-			//	grab the colors from the vertices
+			//	grab the colors from the vertices 映射点和颜色
 			for( s in set.lineGeometry.vertices ){
 				var v = set.lineGeometry.vertices[s];
 				lineColors.push(lineColor);
@@ -380,9 +385,10 @@
 			}
 
 			//	merge it all together
+			console.log(set.lineGeometry);
 			linesGeo.merge(set.lineGeometry);
-
-			var particleColor = lastColor.clone();
+        
+			/*var particleColor = lastColor.clone();
 			var points = set.lineGeometry.vertices;
 			var particleCount = 1;
 			var particleSize = set.lineGeometry.size * dpr;
@@ -407,19 +413,17 @@
 					particleSizes.push( particleSize );
 					particleColors.push( particleColor.r, particleColor.g, particleColor.b );
 				}
-			}
+			}*/
 
 
 		}
 	}
 
-	// console.log(selectedTest);
 
 	linesGeo.colors = lineColors;
-	console.log('lineColors');
-	console.log(lineColors);
 
 	//	make a final mesh out of this composite
+	console.log(  'Type of:' + typeof(linesGeo) );
 	var splineOutline = new THREE.Line( linesGeo, new THREE.LineBasicMaterial(
 		{ 	color: 0xffffff, opacity: 1.0, blending:
 			THREE.AdditiveBlending, transparent:true,
@@ -427,7 +431,7 @@
 			linewidth: 1 } )
 	);
 
-
+    /** 动态粒子图的展示过程
 	particlesGeo.addAttribute('position', new THREE.BufferAttribute(new Float32Array(particlePositions), 3));
 	particlesGeo.addAttribute('size', new THREE.BufferAttribute(new Float32Array(particleSizes), 1));
 	particlesGeo.addAttribute('customColor', new THREE.BufferAttribute(new Float32Array(particleColors), 3));
@@ -451,9 +455,14 @@
 		transparent:	true,
 		// sizeAttenuation: true,
 	});
+	**/
 
 
 
+	/**
+     粒子点动态展示的部分
+	**/
+	/*
 	var pSystem = new THREE.Points( particlesGeo, shaderMaterial );
 	pSystem.dynamic = true;
 	splineOutline.add( pSystem );
@@ -490,11 +499,25 @@
 			positionArray[index++] = particle.z;
 		}
 		this.geometry.attributes.position.needsUpdate = true;
-	};
+	};*/
 
 	//	return this info as part of the mesh package, we'll use this in selectvisualization
 
 
 	return splineOutline;
 }
+</script>
+<script type="text/javascript">
+	function laglat2xyz(longtitude, latitude) {
+		var rad = 100;
+		var lon = longtitude - 90;
+		var lat = latitude;
+		var phi = Math.PI/2 - lat * Math.PI / 180;
+		var theta = 2 * Math.PI - (lon - 9.9) * Math.PI / 180;
+
+		x = Math.sin(phi) * Math.cos(theta) * rad;
+		y = Math.cos(phi) * rad;
+		z = Math.sin(phi) * Math.sin(theta) * rad;
+		return {'x': x, 'y': y, 'z': z}
+	}
 </script>
