@@ -24,7 +24,8 @@
 			"bearing": 90,
 			"outcome": "success",
 			"description": "First known test by North Korea of a missile with a range greater than or equal to 300 km and a payload of 500 kg or greater. The 1984 tests probably took place over the course of several months rather than on the same days as they are entered here. What we know though is that North Korea carried out at least 6 tests. We also know that the tests were carried out at Tonghae. We also know that 3 of the tests succeeded and that at least 3 failed. We do not know exactly which ones were failures and which ones were successes. We also do not know exactly when these tests took place except that it was between April and September of 1984. Readers should interpret the information about these first tests as our best estimates as to what occurred in a secret program within one of the most secret regimes in the world. Information on tests after 1993 is much more complete than information on the early years of this program. For more information on the foundations of North Korea's ballistic missile program, see \"A history of Ballistic Missile Development in the DPRK\" by Joseph Bermudez."
-		}, {
+		}, 
+		{
 			"date": "1984-04-09",
 			"time": "unknown",
 			"series": 3,
@@ -1400,7 +1401,16 @@
 			"bearing": 76,
 			"outcome": "success",
 			"description": "First test of North Korea's new missile, the Hwasong-15. The missile itself is noticeably larger than the Hwasong-14 and estimates for its range suggest it is capable of delivering a payload 13,000 km putting the entire United States within range. The test took place in a field next to the factory which it was rolled out of in images released by North Korea following the test."
-		}],
+		},{
+			"missile": "hwasong-12",
+			"facility": "beijing",
+			"landing": "unknown",
+			"apogee": 500,
+			"distance": 3000,
+			"bearing": 135,
+			"outcome": "success"
+		}
+		],
 		"year": 2017
 	}]
 }

@@ -15,5 +15,6 @@
 	"taepodong-1": {"name": "Taepodong-1", "type": "SLV"},
 	"unha": {"name": "Unha", "type": "SLV"},
 	"unha-3": {"name": "Unha-3", "type": "SLV"},
-	"unknown": {"name": "Unknown", "type": "Unknown"}
+	"unknown": {"name": "Unknown", "type": "Unknown"},
+	"dongfeng": {"name": "Dongfeng", "type": "MRBM"}
 }
