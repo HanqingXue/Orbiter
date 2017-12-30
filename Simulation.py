@@ -4,12 +4,24 @@ import sys
 
 clr.AddReference("System.Web")
 '''
+'''
+
+from ctypes import *
+
+api = WinDLL('test.dll')
+
+
+
+
+sys.path.append(r"C:\\libs")
+'''
 import clr
+
 
 import sys
 import System
 
-sys.path.append(r"./helper")
+sys.path.append(r"C:\\libs")
 clr.FindAssembly('Simulation.dll')
 
 from Simulation import *
