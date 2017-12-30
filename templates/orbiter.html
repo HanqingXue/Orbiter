@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>卫星模拟系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ static_url('css/flat-ui.min.css') }}"   rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ static_url('css/index.css') }}">
+    <script src="{{ static_url('js/jquery.min.js') }}"></script>
+    <script src="{{ static_url('js/flat-ui.min.js') }}"></script>
+    <script src="{{ static_url('js/three.js') }}"></script>
+    <script src="{{ static_url('js/Projector.js') }}"></script>
+    <script src="{{ static_url('js/CanvasRenderer.js') }}"></script>
+    <script src="{{ static_url('js/stats.min.js') }}"></script>
+    <script type="text/javascript" src="{{ static_url('js/echarts.min.js') }}"></script>
+    <script type="text/javascript" src="{{ static_url('js/echarts-gl.min.js') }}"></script>
+  </head>
+  <body>
+    <div id="navigation">
+      <nav class="navbar navbar-inverse" role="navigation">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+          <a class="navbar-brand" href="#" style="">卫星模拟系统</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse-01">
+          <form class="navbar-form navbar-right" action="#" role="search">
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
+                <span class="input-group-btn">
+                  <button type="submit" class="btn"><span class="fui-search"></span></button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </nav>
+    </div>
+    <div class="container">
+    	      <div class="col-md-4">
+        <div id="overview" class="section">
+            <div class="header">
+                <h5><i class="fa fa-desktop"></i> 参数</h5>
+                <a href="javascript:void(0)">
+                    <i class="fa fa-caret-down"></i>
+                </a>
+            </div> <!-- .header -->
+            <div class="body">
+            	<div><p>接收来自后端的参数</p></div>
+            </div> <!-- .body -->
+        </div> <!-- .section -->
+
+        <div class="section">
+          <div class="header">
+            <h5><i class="fa fa-desktop"></i> 实时数据</h5>
+              <a href="javascript:void(0)">
+                <i class="fa fa-caret-down"></i>
+              </a>
+          </div>
+          <div class="body">
+          	<div><p>实时数据展示区域</p></div>
+          </div>
+        </div>
+        <button class="btn btn-embossed btn-primary col-md-12" id="submit">
+          提交
+        </button>
+      </div><!--/.col-md-->
+    <!-- /.container -->
+      <div class="col-md-8">
+        <div class="alert alert-warning " style="display: none">
+          <a href="#" class="close" data-dismiss="alert">
+            &times;
+          </a>
+          <strong>警告！</strong>您的输入数据有问题。
+        </div>
+        <div class="section">
+          <div class="header">
+            <h5><i class="fa fa-desktop"></i>数据可视化区域</h5>
+                <a href="javascript:void(0)">
+                    <i class="fa fa-caret-down"></i>
+                </a>
+          </div>
+          <div class="body" >
+      		  <div id="container" style="width: 640px;height: 600px"></div>
+      	  </div>
+        </div>
+      </div>
+</body>
+<script type="text/javascript">
+var chart = echarts.init(document.getElementById('container'));
+
+option = {
+    backgroundColor: '#00264d',
+    graphic:[
+        /*最外层圆线*/
+        {
+            type:'circle',
+            left:'center',
+            top:'middle',
+            shape:{
+                r:380
+            },
+            style:{
+                fill:'#113048'
+            }
+        },
+        /*最底层圆*/
+        {
+            type:'ring',
+            left:'center',
+            top:'middle',
+            shape:{
+                r:390,
+                r0:392
+            },
+            style:{
+                fill:'#113048'
+            }
+        }
+    ],
+  series: [
+      /*仪表盘图，做中间刻度线*/
+    {
+      type: 'gauge',
+      name: '业务指标',
+      radius:'60%',
+      startAngle:'0',
+      endAngle:'-359.99',
+      splitNumber:'100',
+      pointer:{
+        show:false
+      },
+      title:{
+          show:false
+      },
+      detail: {
+          show:false
+      },
+      data: [{value: 95, name: '完成率'}],
+      axisLine:{
+        lineStyle: {
+          color:[[1,new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+                        offset: 0,
+                        color: 'rgba(4, 234,255, 1)'
+                    }, {
+                        offset: 0.5,
+                        color: 'rgba(74, 87,254, 1)'
+                    }, {
+                        offset:1,
+                       color: 'rgba(59, 119,254, 1)'
+                    }])]],
+          width: 20,
+          opacity: 1
+        }
+      },
+      axisTick: {
+        show: false
+      },
+      splitLine: {
+        show: true,
+        length:20,
+        lineStyle: {
+          color: 'rgba(255,255,255,1)',
+          width: 2,
+          type: 'solid',
+        },
+      },
+      axisLabel: {
+        show: false
+      }
+    },
+    /*内心原型图，展示整体数据概览*/
+    {
+        name: 'pie',
+        type: 'pie',
+        clockWise: true,
+        startAngle:-270,
+        radius: ['48%', '50%'],
+        hoverAnimation: false,
+        center: ['50%', '50%'],
+        data: [{
+            value: 5,
+            label: {
+                normal: {
+                    formatter: '{d}%',
+                    position: 'center',
+                    show: true,
+                    textStyle: {
+                        fontSize: '35',
+                        fontWeight: 'normal',
+                        color: '#fff'
+                    }
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#f74369',
+                    shadowColor: '#f74369',
+                    shadowBlur: 10
+                }
+            }
+        }, {
+            value: 5,
+            name: 'invisible',
+            itemStyle: {
+                normal: {
+                    color: 'rgba(247,67,105,0)', // 未完成的圆环的颜色
+                    label: {
+                        show: false
+                    },
+                    labelLine: {
+                        show: false
+                    }
+                },
+                emphasis: {
+                    color: 'rgba(44,59,70,1)' // 未完成的圆环的颜色
+                }
+            }
+        }]
+    },
+        /*外层环形图，展示详细占比*/
+        {
+        name: 'pie',
+        type: 'pie',
+        clockWise: true,
+        startAngle:-270,
+        radius: ['60%', '65%'],
+        hoverAnimation: false,
+        center: ['50%', '50%'],
+        data: [{
+            value: 5,
+            name:'1',
+            itemStyle:{
+                normal:{
+                    color:'#e7b507'
+                }
+            }
+        },
+        {
+            value: 25,
+            name:'1',
+            itemStyle:{
+                normal:{
+                    color:'#009eff'
+                }
+            }
+        },
+        {
+            value: 15,
+            name:'1',
+            itemStyle:{
+                normal:{
+                    color:'#f74369'
+                }
+            }
+        }],
+        itemStyle:{
+            normal:{
+                borderWidth:3,
+                borderColor:'#00264d'
+            }
+        }
+    }
+  ]
+};
+
+chart.setOption(option);
+</script>
+</html>
