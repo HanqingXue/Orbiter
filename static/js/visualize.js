@@ -77,6 +77,8 @@ function vincenty(lat, lon, bearing, distance) {
 	));
 	var L2 = L + L1;
 
+	var test = {'lat': phi2 * 180 / Math.PI, 'lon': L2 * 180 / Math.PI};
+
 	return {'lat': phi2 * 180 / Math.PI, 'lon': L2 * 180 / Math.PI};
 }
 

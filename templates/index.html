@@ -317,7 +317,6 @@
 	//var filePath = 'data/test.' + lang + '.json';
 	var filePath = "{{ static_url('data/test.en.json') }}"
 	filePath = encodeURI( filePath );
-	// console.log(filePath);
 
 	xhr = new XMLHttpRequest();
 	xhr.open( 'GET', filePath, true );
@@ -340,11 +339,168 @@
 }
 </script>
 <script type="text/javascript">
+	function getVisualizedMeshCustuom(set){
+	/*
+	set : dictType
+	keys:
+		lineGeometry
+		missile: "hwasong-12"
+	*/
+	var linesGeo = new THREE.Geometry();
+	var lineColors = [];
+
+	var particlesGeo = new THREE.BufferGeometry();
+	var particlePositions = [];
+	var particleSizes = [];
+	var particleColors = [];
+
+	particlesGeo.vertices = [];
+
+		//	we may not have line geometry... (?)
+	console.log(set.missile);
+	//在此处将颜色信息替换
+	var lineColor = new THREE.Color(missileColors[set.missile]);
+	var lastColor;
+	//	grab the colors from the vertices 映射点和颜色
+	for( s in set.lineGeometry.vertices ){
+		var v = set.lineGeometry.vertices[s];
+		lineColors.push(lineColor);
+		lastColor = lineColor;
+	}
+	//	merge it all together
+	linesGeo.merge(set.lineGeometry);
+      
+	var particleColor = lastColor.clone();
+	var points = set.lineGeometry.vertices;
+	var particleCount = 1;
+	var particleSize = set.lineGeometry.size * dpr;
+	if (set === selectedTest) {
+		particleCount *= 4;
+		particleSize *= 2;
+	}
+	for( var rIndex=0; rIndex<points.length-1; rIndex++ ){
+		for ( var s=0; s < particleCount; s++ ) {
+			var point = points[rIndex];
+			var particle = point.clone();
+			particle.moveIndex = rIndex;
+			particle.nextIndex = rIndex+1;
+			if(particle.nextIndex >= points.length )
+				particle.nextIndex = 0;
+			particle.lerpN = 0;
+			particle.path = points;
+			particlesGeo.vertices.push( particle );
+			particle.size = particleSize;
+			particlePositions.push( particle.x, particle.y, particle.z );
+			particleSizes.push( particleSize );
+			particleColors.push( particleColor.r, particleColor.g, particleColor.b );
+		}
+	}
+	
+
+	linesGeo.colors = lineColors;
+	//	make a final mesh out of this composite
+	var splineOutline = new THREE.Line( linesGeo, new THREE.LineBasicMaterial(
+		{ 	color: 0xffffff, opacity: 1.0, blending:
+			THREE.AdditiveBlending, transparent:true,
+			depthWrite: false, vertexColors: true,
+			linewidth: 1 } )
+	);
+
+     //动态粒子图的展示过程
+	particlesGeo.addAttribute('position', new THREE.BufferAttribute(new Float32Array(particlePositions), 3));
+	particlesGeo.addAttribute('size', new THREE.BufferAttribute(new Float32Array(particleSizes), 1));
+	particlesGeo.addAttribute('customColor', new THREE.BufferAttribute(new Float32Array(particleColors), 3));
+
+	uniforms = {
+		amplitude: { type: "f", value: 1.0 },
+		color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+		texture:   { type: "t", value: new THREE.TextureLoader().load( 
+			"{{ static_url('images/particleA.png') }}")},
+	};
+
+	var shaderMaterial = new THREE.ShaderMaterial( {
+
+		uniforms:		uniforms,
+		vertexShader:	document.getElementById( 'vertexshader' ).textContent,
+		fragmentShader:	document.getElementById( 'fragmentshader' ).textContent,
+
+		blending:		THREE.AdditiveBlending,
+		depthTest:		true,
+		depthWrite:		false,
+		transparent:	true,
+		// sizeAttenuation: true,
+	});
+	
+
+	/**
+     粒子点动态展示的部分
+	**/
+	
+	var pSystem = new THREE.Points( particlesGeo, shaderMaterial );
+	pSystem.dynamic = true;
+	splineOutline.add( pSystem );
+
+	pSystem.update = function(){
+		// var time = Date.now();
+		var positionArray = this.geometry.attributes.position.array;
+		var index = 0;
+		for( var i in this.geometry.vertices ){
+			var particle = this.geometry.vertices[i];
+			var path = particle.path;
+			var moveLength = path.length;
+
+			particle.lerpN += 0.05;
+			if(particle.lerpN > 1){
+				particle.lerpN = 0;
+				particle.moveIndex = particle.nextIndex;
+				particle.nextIndex++;
+				if( particle.nextIndex >= path.length ){
+					particle.moveIndex = 0;
+					particle.nextIndex = 1;
+				}
+			}
+
+			var currentPoint = path[particle.moveIndex];
+			var nextPoint = path[particle.nextIndex];
+
+
+			particle.copy( currentPoint );
+			particle.lerp( nextPoint, particle.lerpN );
+
+			positionArray[index++] = particle.x;
+			positionArray[index++] = particle.y;
+			positionArray[index++] = particle.z;
+		}
+		this.geometry.attributes.position.needsUpdate = true;
+	};
+
+	//	return this info as part of the mesh package, we'll use this in selectvisualization
+	return splineOutline;
+}
+</script>
+<script type="text/javascript">
+	function lonlat2xyz(longtitude, latitude) {
+		var rad = 100;
+		var lon = longtitude - 90;
+		var lat = latitude;
+		var phi = Math.PI/2 - lat * Math.PI / 180;
+		var theta = 2 * Math.PI - (lon - 9.9) * Math.PI / 180;
+
+		var lcenter = new THREE.Vector3();
+		lcenter.x = Math.sin(phi) * Math.cos(theta) * rad;
+		lcenter.y = Math.cos(phi) * rad;
+		lcenter.z = Math.sin(phi) * Math.sin(theta) * rad;
+		return lcenter;
+	}
+</script>
+<script type="text/javascript">
 	function getVisualizedMesh( linearData, year, outcomeCategories, missileCategories ){
 	//	pick out the year first from the data
 	var indexFromYear = yearIndexLookup[year];
 
 	var bin = linearData[indexFromYear].data;
+	console.log('bin:');
+	console.log(bin);
 
 	var linesGeo = new THREE.Geometry();
 	var lineColors = [];
@@ -362,7 +518,6 @@
 	//	go through the data from year, and find all relevant geometries
 	for( i in bin ){
 		var set = bin[i];
-		console.log(set);
 
 		var relevantOutcomeCategory = $.inArray(set.outcome, outcomeCategories) >= 0;
 		var relevantMissileCategory = $.inArray(set.missile, missileCategories) >= 0;
@@ -383,7 +538,6 @@
 			}
 
 			//	merge it all together
-			console.log(set.lineGeometry);
 			linesGeo.merge(set.lineGeometry);
         
 			var particleColor = lastColor.clone();
@@ -421,7 +575,6 @@
 	linesGeo.colors = lineColors;
 
 	//	make a final mesh out of this composite
-	console.log(  'Type of:' + typeof(linesGeo) );
 	var splineOutline = new THREE.Line( linesGeo, new THREE.LineBasicMaterial(
 		{ 	color: 0xffffff, opacity: 1.0, blending:
 			THREE.AdditiveBlending, transparent:true,
@@ -504,18 +657,4 @@
 
 	return splineOutline;
 }
-</script>
-<script type="text/javascript">
-	function laglat2xyz(longtitude, latitude) {
-		var rad = 100;
-		var lon = longtitude - 90;
-		var lat = latitude;
-		var phi = Math.PI/2 - lat * Math.PI / 180;
-		var theta = 2 * Math.PI - (lon - 9.9) * Math.PI / 180;
-
-		x = Math.sin(phi) * Math.cos(theta) * rad;
-		y = Math.cos(phi) * rad;
-		z = Math.sin(phi) * Math.sin(theta) * rad;
-		return {'x': x, 'y': y, 'z': z}
-	}
 </script>

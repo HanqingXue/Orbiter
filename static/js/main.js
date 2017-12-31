@@ -105,7 +105,6 @@ function initScene() {
 
 	//	-----------------------------------------------------------------------------
 	sphere = new THREE.Mesh( new THREE.SphereBufferGeometry( 100, 40, 40 ), mapMaterial );
-	console.log(sphere.ce);
 	sphere.doubleSided = false;
 	sphere.rotation.x = Math.PI;
 	sphere.rotation.y = -Math.PI/2;
@@ -219,18 +218,24 @@ function initScene() {
 	camera2d.position.y = 0;
 	camera.lookAt(scene2d.position);
 
-	var material_test = new THREE.LineBasicMaterial({color:0xffffff});
+	/*var material_test = new THREE.LineBasicMaterial({color:0xffffff});
 	var geometry_test = new THREE.Geometry();
-	geometry_test.vertices.push(new THREE.Vector3(69.58852692416501, 63.31377323036632, -33.89399710654544));
-    geometry_test.vertices.push(new THREE.Vector3(81.97288209190206, 85.46188382003189, -56.7228754279934));
-    //geometry_test.vertices.push(new THREE.Vector3(0,5,0));
+	geometry_test.vertices.push(new THREE.Vector3(61.7152081255694, 60.57021282243692, -50.22432084819417));
+    geometry_test.vertices.push(new THREE.Vector3(64.87195729033834, 69.51603950524398, -30.970137371763073));
+    geometry_test.vertices.push(new THREE.Vector3(72.1643654183197, 63.09466603018497,  -28.484513025688983));*/
+	testpoint = []
+	testpoint.push(new THREE.Vector3(61.7152081255694, 60.57021282243692, -50.22432084819417));
+	testpoint.push(new THREE.Vector3(64.87195729033834, 69.51603950524398, -30.970137371763073));
+	testpoint.push(new THREE.Vector3(72.1643654183197, 63.09466603018497,  -28.484513025688983));
 
-    var line_test = new THREE.Line(geometry_test, material_test);
-    scene.add(line_test); 
-
+	var set = {
+		'missile': "hwasong-12",
+		'lineGeometry': createLineGeometry(testpoint)
+	}
+	var mymesh = getVisualizedMeshCustuom(set);
+	//	add it to scene graph
+	visualizationMesh.add( mymesh );
 	var windowResize = THREEx.WindowResize(renderer, camera, camera2d);
-
-
 }
 
 

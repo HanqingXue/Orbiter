@@ -84,63 +84,51 @@
                 </a>
           </div>
           <div class="body" >
-      		  <div id="container" style="width: 640px;height: 600px"></div>
+      		  <div id="container" style="width: 700px;height: 600px"></div>
       	  </div>
         </div>
       </div>
 </body>
 <script type="text/javascript">
 var chart = echarts.init(document.getElementById('container'));
-var data = [];
+//var data = [[0,1,-1], [0,0,0]];
 
-option = {
-    tooltip: {},
-    visualMap: {
-        show: false,
-        dimension: 2,
-        min: 10,
-        max: 40,
-        inRange: {
-            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+/*
+ 点的格式是[经度， 维度]
+*/
+var routes = [
+  [[39.956589, 43.449928],[49.278728, 55.606186]], 
+  [[39.956589, 43.449928],[115.00, 39.0011, ]]]
+chart.setOption({
+    backgroundColor: '#000',
+    globe: {
+        baseTexture: "{{ static_url('images/earth.jpeg')}}",
+        //heightTexture: '/asset/get/s/data-1491889019097-rJQYikcpl.jpg',
+        shading: 'lambert',
+        light: {
+            ambient: {
+                intensity: 0.8
+            },
+            main: {
+                intensity: 0.8
+            }
+        },
+        viewControl: {
+            autoRotate: false,
+            targetCoord: [116.46, 39.92]
         }
     },
-    xAxis3D: {},
-    yAxis3D: {},
-    zAxis3D: {},
-    grid3D: {},
-    series: [{
-        type: 'surface',
-        parametric: true,
-        // shading: 'albedo',
-        parametricEquation: {
-            u: {
-                min: -Math.PI,
-                max: Math.PI,
-                step: Math.PI / 20
-            },
-            v: {
-                min: 0,
-                max: Math.PI,
-                step: Math.PI / 20
-            },
-            x: function (u, v) {
-                return Math.sin(v) * Math.sin(u);
-            },
-            y: function (u, v) {
-                return Math.sin(v) * Math.cos(u);
-            },
-            z: function (u, v) {
-                return Math.cos(v);
-            }
-        }
-    },{
-        type: 'line3D',
-        data: data,
+    series: {
+        type: 'lines3D',
+        coordinateSystem: 'globe',
+        blendMode: 'lighter',
         lineStyle: {
-            width: 4
-        }
-    }]
-};
-chart.setOption(option)
+            width: 1,
+            color: '#00ff00',
+            opacity: 0.5
+        },
+        data: routes
+    }
+});
 </script>
 </html>

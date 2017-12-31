@@ -11,8 +11,6 @@ function makeConnectionLineGeometry
 	//	how high we want to shoot the curve upwards
 	var midHeight = globeRadius * apogee / 6378.137;
 	var midLength = globeRadius + midHeight;
-//	var anchorHeight = globeRadius * apogee / 6378.137 * 0.6666;
-//	var anchorLength = globeRadius + anchorHeight;
 
 	//	start of the line
 	var start = facility.center;
@@ -77,7 +75,7 @@ function makeConnectionLineGeometry
 
 	//	create a line geometry out of these
 	var curveGeometry = createLineGeometry( points );
-
+	//console.log(curveGeometry);
 	curveGeometry.size = 15;
 
 	return curveGeometry;
