@@ -22,7 +22,7 @@
       }
     </style>
   </head>
-  <body>
+  <body onload='onLoad();'>
     <div id="navigation">
       <nav class="navbar navbar-inverse" role="navigation">
         <div class="navbar-header">
@@ -123,7 +123,7 @@
               </a>
           </div>
           <div class="body">
-          	<div><p>轨迹追踪</p></div>
+          	<div id="water"></div>
           </div>
         </div>
         <button class="btn btn-embossed btn-primary col-md-12 missile" id="orbit">
@@ -151,6 +151,10 @@
       	  </div>
         </div>
       </div>
+        Message to send:   <input type="text" id="msg" />  
+      <input type="button" onclick="sendMsg();" value="发送" />  
+
+
 </body>
 <script type="text/javascript">
 var chart = echarts.init(document.getElementById('container'));
@@ -201,4 +205,19 @@ chart.setOption({
     }
 });
 </script>
+<script type="text/javascript">  
+    var ws;  
+    function onLoad(){  
+        ws = new WebSocket("ws://localhost:8000/ws");  
+        ws.onmessage = function(e){  
+            //alert(e.data)
+            console.log(e.data);  
+        }  
+    }  
+  
+  
+    function sendMsg(){  
+        ws.send(document.getElementById('msg').value);  
+    }  
+</script> 
 </html>

@@ -9,8 +9,10 @@ sys.setdefaultencoding('utf-8')
 
 from handlers.index import IndexHandler
 from handlers.orbiter import OrbiterHandler
+from handlers.websocket import WebSocketHandler
 
 url = [
     (r'/', OrbiterHandler),
-    (r'/orbit', IndexHandler)
+    (r'/orbit', IndexHandler),
+    (r'/ws', WebSocketHandler)
 ] 
