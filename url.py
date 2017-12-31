@@ -11,6 +11,6 @@ from handlers.index import IndexHandler
 from handlers.orbiter import OrbiterHandler
 
 url = [
-    (r'/', IndexHandler),
-    (r'/orbit', OrbiterHandler)
+    (r'/', OrbiterHandler),
+    (r'/orbit', IndexHandler)
 ] 
