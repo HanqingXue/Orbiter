@@ -12,7 +12,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
   
     def open(self): 
 
-        self.write_message("Established!")
+        self.write_message({'msg': "Established!"})
         pass
   
     def on_message(self, message): 
@@ -20,10 +20,11 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         while i < 10:
             stat = {
                 'xxx': 11,
-                'prob': random.random()
+                'prob': round(random.random(), 3)
             }
             time.sleep(0.2)
             self.write_message(json.dumps(stat))
+            print json.dumps(stat)
             i +=1  
   
     def on_close(self):  

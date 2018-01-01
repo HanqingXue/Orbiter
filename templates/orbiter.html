@@ -110,7 +110,7 @@
                   </div>
               </div>
             </div> <!-- .body -->
-            <button class="btn btn-embossed btn-primary col-md-12 missile" id="submit">
+            <button class="btn btn-embossed btn-primary col-md-12 missile" id="submit" onclick="sendMsg()">
           提交
             </button>
         </div> <!-- .section -->
@@ -123,7 +123,10 @@
               </a>
           </div>
           <div class="body">
-          	<div id="water"></div>
+          	<div class="row-fluid">
+              <div class="col-md-6">探测概率</div>
+              <div class="col-md-6"><p id="prob">0%</p></div> 
+            </div>
           </div>
         </div>
         <button class="btn btn-embossed btn-primary col-md-12 missile" id="orbit">
@@ -150,11 +153,6 @@
       		  <div id="container" style="width: 700px;height: 700px"></div>
       	  </div>
         </div>
-      </div>
-        Message to send:   <input type="text" id="msg" />  
-      <input type="button" onclick="sendMsg();" value="发送" />  
-
-
 </body>
 <script type="text/javascript">
 var chart = echarts.init(document.getElementById('container'));
@@ -211,13 +209,19 @@ chart.setOption({
         ws = new WebSocket("ws://localhost:8000/ws");  
         ws.onmessage = function(e){  
             //alert(e.data)
-            console.log(e.data);  
+            console.log(e.data);
+            var data = JSON.parse(e.data);
+            if( typeof(data['prob']) == 'undefined') {
+              console.log("hello");
+            } else {
+              $('#prob').text(data['prob'] + '%');
+            }
         }  
     }  
   
   
     function sendMsg(){  
-        ws.send(document.getElementById('msg').value);  
+        ws.send("hehe");  
     }  
 </script> 
 </html>
