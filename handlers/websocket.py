@@ -68,12 +68,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             SNR = St / (airn + no);   
 
             P = probability.getP(snr, SNR, pj)  if RD < MR else 0
-
+            #lng
+            #lat
             if t  % 20 == 0:
                 print t
                 stat = {
                     'xxx': 11,
-                    'prob': round(random.random(), 3)
+                    'prob': P * 100
                 }
 
                 time.sleep(1)

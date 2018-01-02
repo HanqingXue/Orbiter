@@ -59,11 +59,23 @@
                 <p><b>同步卫星参数</b></p>
               </div>
               <div class="row-fluid" >
-                    <div class="col-md-6">同步卫星方位角</div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">同步卫星1方位角</div>
+                    <div class="col-md-5 missile">
                       <input class="form-control">
                     </div> <!-- .span8 -->
               </div> <!-- .row-fluid -->
+              <div class="row-fluid">
+                <div class="col-md-7">同步卫星2方位角</div>
+                <div class="col-md-5 missile">
+                      <input class="form-control">
+                </div> 
+              </div>
+              <div class="row-fluid">
+                <div class="col-md-7">同步卫星3方位角</div>
+                <div class="col-md-5 missile">
+                      <input class="form-control">
+                </div> 
+              </div>
               <div class="row-fluid">
                 <p><b>导弹参数</b></p>
               </div>
@@ -97,6 +109,7 @@
                     <input class="form-control">
                   </div>
               </div>
+
               <div class="row-fluid">
                   <div class="col-md-6">虚警概率</div>
                   <div class="col-md-6 missile">
@@ -124,8 +137,8 @@
           </div>
           <div class="body">
           	<div class="row-fluid">
-              <div class="col-md-6">探测概率</div>
-              <div class="col-md-6"><p id="prob">0%</p></div> 
+              <div class="col-md-3">探测概率</div>
+              <div class="col-md-9"><p id="prob">0%</p></div> 
             </div>
           </div>
         </div>
@@ -156,14 +169,91 @@
 </body>
 <script type="text/javascript">
 var chart = echarts.init(document.getElementById('container'));
-var prob = echarts.init(document.getElementById('prob'));
 /*
  点的格式是[经度， 维度]
 */
 var routes = [
   [[39.956589, 43.449928],[115.00, 39.0011, ]]]
+for(var i = 0; i < 90; i+= 0.5)
+{
+  var start = [i*1, 0];
+  var end   = [90 + i, 0];
+  var raduis = [];
+  var revRaduis = []
+  raduis.push(start);
+  raduis.push(end);
+  revRaduis.push(-start);
+  revRaduis.push(-end);
+  routes.push(raduis);
+}
+
+for(var i = 45; i < 135; i+= 0.5)
+{
+  var start = [i*1, 0];
+  var end   = [90 + i, 0];
+  var raduis = [];
+  var revRaduis = []
+  raduis.push(start);
+  raduis.push(end);
+  revRaduis.push(-start);
+  revRaduis.push(-end);
+  routes.push(raduis);
+}
+
+for(var i = 90; i < 180; i+= 0.5)
+{
+  var start = [i*1, 0];
+  var end   = [90 + i, 0];
+  var raduis = [];
+  var revRaduis = []
+  raduis.push(start);
+  raduis.push(end);
+  revRaduis.push(-start);
+  revRaduis.push(-end);
+  routes.push(raduis);
+}
+
+for(var i = 135; i < 225; i+= 0.5)
+{
+  var start = [i*1, 0];
+  var end   = [90 + i, 0];
+  var raduis = [];
+  var revRaduis = []
+  raduis.push(start);
+  raduis.push(end);
+  revRaduis.push(-start);
+  revRaduis.push(-end);
+  routes.push(raduis);
+}
+
+for(var i = 180; i < 270; i+= 0.5)
+{
+  var start = [i*1, 0];
+  var end   = [90 + i, 0];
+  var raduis = [];
+  var revRaduis = []
+  raduis.push(start);
+  raduis.push(end);
+  revRaduis.push(-start);
+  revRaduis.push(-end);
+  routes.push(raduis);
+}
+
+for(var i = 225; i < 315; i+= 0.5)
+{
+  var start = [i*1, 0];
+  var end   = [90 + i, 0];
+  var raduis = [];
+  var revRaduis = []
+  raduis.push(start);
+  raduis.push(end);
+  revRaduis.push(-start);
+  revRaduis.push(-end);
+  routes.push(raduis);
+}
+
 chart.setOption({
-    backgroundColor: '#FFF',
+    backgroundColor: '#000',
     globe: {
         baseTexture: "{{ static_url('images/earth.jpeg')}}",
         //heightTexture: '/asset/get/s/data-1491889019097-rJQYikcpl.jpg',
@@ -177,8 +267,10 @@ chart.setOption({
             }
         },
         viewControl: {
-            autoRotate: false,
-            targetCoord: [116.46, 39.92]
+            autoRotate: true,
+            targetCoord: [0, 0],
+            autoRotateSpeed: 0.006146540
+            //[116.46, 39.92]
         }
     },
     series: {
@@ -201,80 +293,6 @@ chart.setOption({
         data: routes
     }
 });
-</script>
-<script type="text/javascript">
-var option = {
-    title : {
-        text: '未来一周气温变化',
-        subtext: '纯属虚构'
-    },
-    tooltip : {
-        trigger: 'axis'
-    },
-    legend: {
-        data:['最高气温','最低气温']
-    },
-    toolbox: {
-        show : true,
-        feature : {
-            mark : {show: true},
-            dataView : {show: true, readOnly: false},
-            magicType : {show: true, type: ['line', 'bar']},
-            restore : {show: true},
-            saveAsImage : {show: true}
-        }
-    },
-    calculable : true,
-    xAxis : [
-        {
-            type : 'category',
-            boundaryGap : false,
-            data : ['周一','周二','周三','周四','周五','周六','周日']
-        }
-    ],
-    yAxis : [
-        {
-            type : 'value',
-            axisLabel : {
-                formatter: '{value} °C'
-            }
-        }
-    ],
-    series : [
-        {
-            name:'最高气温',
-            type:'line',
-            data:[11, 11, 15, 13, 12, 13, 10],
-            markPoint : {
-                data : [
-                    {type : 'max', name: '最大值'},
-                    {type : 'min', name: '最小值'}
-                ]
-            },
-            markLine : {
-                data : [
-                    {type : 'average', name: '平均值'}
-                ]
-            }
-        },
-        {
-            name:'最低气温',
-            type:'line',
-            data:[1, -2, 2, 5, 3, 2, 0],
-            markPoint : {
-                data : [
-                    {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
-                ]
-            },
-            markLine : {
-                data : [
-                    {type : 'average', name : '平均值'}
-                ]
-            }
-        }
-    ]
-};
-prob.setOption(option);
 </script>
 <script type="text/javascript">  
     var ws;  
