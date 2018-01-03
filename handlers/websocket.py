@@ -28,19 +28,21 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
         from Simulation import *
         import Simulation
-
-        Sa0 = 80
-        Mq0 = 70
-        Ma0 = 60
+        Sa0 = 110
+        Mq0 = 5
+        Ma0 = 116.23
         MA0 = 10
-        v0 = 500
-        a = 45
+        v0 = 1000
+        a = 10
         snr = 28
         Ri = 40000
         pj = 0.00001
+        LngMa = 0
+        LatMq = 0
         '''
         Globe varibes
         '''
+        f = open('root', 'w')
         DR = 0.01745329252 
         P = 0   
         track = Track(0, 0)
@@ -52,35 +54,48 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         airnoise = Airnoise(0)
         detectornoise = Detectornoise(0)
         probability = Probability(0, 0, 0)
+        transformsg = TransformSG(0, 0)
+        elevation = Elevation(0)
 
         for t in range(0, 1000+1):
-            Sa = track.getSa(Sa0*DR, t)           
+            Sa = track.getSa((90+Sa0)*DR, t) 
+            LngSa = transformsg.getLng(Sa/DR)          
             MX = trajectory.gettryX(v0, a*DR, t)        
             MY = trajectory.gettryY(v0, a*DR, t)        
             Mr = location.getMr(MA0*DR, MX, MY)          
-            Mq = location.getMq(Mq0*DR, MA0*DR, MX, MY)   
-            Ma = location.getMa(Ma0*DR, MA0*DR)    
+            
+            Mq = location.getMq((90-Mq0)*DR, MA0*DR, MX, MY)   
+            Ma = location.getMa((90+Ma0)*DR, MA0*DR)  
+            LngMa = transformsg.getLng(Ma / DR)
+            LatMq = transformsg.getLat(Mq / DR)
+            Ele = elevation.getElevation(Mr)
             RD = distance.getRD(Sa, Ma, Mq)           
             MR = maxDD.getRmax(snr, Ri)            
             St = strength.getS(Ri, RD)                    
             airn = airnoise.getairn(RD)           
             no = detectornoise.getNET(RD)       
-            SNR = St / (airn + no);   
+            SNR = St / (airn + no);
+
+            f.write(str(LngMa) + '\t' + str(LatMq) +'\n')
+
 
             P = probability.getP(snr, SNR, pj)  if RD < MR else 0
             #lng
             #lat
             if t  % 20 == 0:
-                print t
                 stat = {
                     'xxx': 11,
-                    'prob': P * 100
+                    'prob': round(P * 100, 10),
+                    'lng': round(LngMa, 6),
+                    'lat': round(LatMq, 6)
                 }
 
                 time.sleep(1)
                 self.write_message(json.dumps(stat))
             else:
                 continue
+
+        f.close()
   
     def on_close(self):  
         pass

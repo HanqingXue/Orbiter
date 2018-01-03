@@ -82,44 +82,50 @@
               <div class="row-fluid" >
                     <div class="col-md-6">初速度</div>
                     <div class="col-md-6 missile">
-                      <input class="form-control">
+                      <input class="form-control" value="v0" id="v0">
                     </div> <!-- .span8 -->
               </div> <!-- .row-fluid -->
               <div class="row-fluid" >
                     <div class="col-md-6">仰角</div>
                     <div class="col-md-6 missile">
-                      <input class="form-control">
+                      <input class="form-control" value="a" id="a">
                     </div> <!-- .span8 -->
               </div> <!-- .row-fluid -->
               <div class="row-fluid">
                   <div class="col-md-6">方位角</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control">
+                    <input class="form-control" value="MA0" id="MA0">
                   </div>
               </div>
               <div class="row-fluid">
                   <div class="col-md-6">纬度</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control">
+                    <input class="form-control" value="Mq0" id="Mq0">
                   </div>
               </div>
               <div class="row-fluid">
                   <div class="col-md-6">经度</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control">
+                    <input class="form-control" value="Ma0" id="Ma0">
                   </div>
               </div>
 
               <div class="row-fluid">
                   <div class="col-md-6">虚警概率</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control">
+                    <input class="form-control" value="pj" id="pj">
                   </div>
               </div>
               <div class="row-fluid">
                   <div class="col-md-6">尾焰燃烧强度</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control">
+                    <input class="form-control" value="Ri" id="Ri">
+                  </div>
+              </div>
+              <div class="row-fluid">
+                  <div class="col-md-6">信噪比阈值</div>
+                  <div class="col-md-6 missile">
+                    <input class="form-control" value="snr" id="snr">
                   </div>
               </div>
             </div> <!-- .body -->
@@ -136,9 +142,17 @@
               </a>
           </div>
           <div class="body">
-          	<div class="row-fluid">
-              <div class="col-md-3">探测概率</div>
-              <div class="col-md-9"><p id="prob">0%</p></div> 
+          	<div class="row-fluid col-md-12">
+              <div class="col-md-5">探测概率</div>
+              <div class="col-md-7"><p id="prob">0%</p></div> 
+            </div>
+            <div class="row-fluid col-md-12">
+              <div class="col-md-5">导弹经度</div>
+              <div class="col-md-7"><p id="missileLng">-</p></div>
+            </div>
+            <div class="row-fluid col-md-12">
+              <div class="col-md-5">导弹纬度</div>
+              <div class="col-md-7"><p id="missileLat">-</p></div>
             </div>
           </div>
         </div>
@@ -173,7 +187,7 @@ var chart = echarts.init(document.getElementById('container'));
  点的格式是[经度， 维度]
 */
 var routes = [
-  [[39.956589, 43.449928],[115.00, 39.0011, ]]]
+  [[126.23, 4.99686889413], [126.23, 4.21738]]]
 for(var i = 0; i < 90; i+= 0.5)
 {
   var start = [i*1, 0];
@@ -306,7 +320,12 @@ chart.setOption({
               console.log("hello");
             } else {
               $('#prob').text(data['prob'] + '%');
+              $('#missileLng').text(data['lng']);
+              $('#missileLat').text(data['lat']);
             }
+        }
+        ws.onclose = function(e) {
+           //reconnect();
         }  
     }  
     function sendMsg(){  
