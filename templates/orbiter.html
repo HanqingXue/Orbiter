@@ -192,11 +192,13 @@
 var chart = echarts.init(document.getElementById('container'));
 var routes = [
     [
-      [126.23, 4.99686889413], 
-      [126.23, 3.068833]
+      [0, 0], 
+      [0, 0]
     ]
   ]
+var satelliteRoute = []
 var option = {};
+var series = []
 </script>
 <script type="text/javascript">
   $(function() {
@@ -207,46 +209,71 @@ var option = {};
 </script>
 <script type="text/javascript">
   function chartInit() {
-    option = {
-    backgroundColor: '#000',
-    globe: {
-        baseTexture: "{{ static_url('images/earth.jpeg')}}",
-        //heightTexture: '/asset/get/s/data-1491889019097-rJQYikcpl.jpg',
-        shading: 'lambert',
-        light: {
-            ambient: {
-                intensity: 0.3
-            },
-            main: {
-                intensity: 0.3
-            }
-        },
-        viewControl: {
-            autoRotate: true,
-            targetCoord: [0, 0],
-            autoRotateSpeed: 0.006146540
-            //[116.46, 39.92]
-        }
-    },
-    series: {
+    series.push({
         type: 'lines3D',
         coordinateSystem: 'globe',
         blendMode: 'lighter',
         lineStyle: {
-            width: 2,
-            color: '#3A5FCD',
-            opacity: 0.9
+          width: 4,
+          color: '#006000',
+          opacity: 0.01
         },
 
         effect: {
-                show: true,
-                period: 4,
-                trailLength: 0.02,
-                symbol: 'arrow',
-                symbolSize: 5,
+          show: true,
+          period: 4,
+          trailLength: 0.02,
+          symbol: 'arrow',
+          symbolSize: 5,
+        },
+        data: satelliteRoute
+      }
+    );
+
+    series.push({
+        type: 'lines3D',
+        coordinateSystem: 'globe',
+        blendMode: 'lighter',
+        lineStyle: {
+          width: 2,
+          color: '#3A5FCD',
+          opacity: 0.9
+        },
+
+        effect: {
+          show: true,
+          period: 4,
+          trailLength: 0.02,
+          symbol: 'arrow',
+          symbolSize: 5,
         },
         data: routes
-    }}
+      }
+    );
+    option = {
+      backgroundColor: '#000',
+      globe: {
+          baseTexture: "{{ static_url('images/earth.jpeg')}}",
+          //heightTexture: '/asset/get/s/data-1491889019097-rJQYikcpl.jpg',
+          shading: 'lambert',
+          light: {
+              ambient: {
+                  intensity: 0.3
+              },
+              main: {
+                  intensity: 0.3
+              }
+          },
+          viewControl: {
+              autoRotate: true,
+              targetCoord: [0, 0],
+              autoRotateSpeed: 0.006146540
+              //[116.46, 39.92]
+          }
+      },
+      series: series
+    }
+
     chart.setOption(option);
   }
 </script>
@@ -262,7 +289,7 @@ var option = {};
       raduis.push(end);
       revRaduis.push(-start);
       revRaduis.push(-end);
-      routes.push(raduis);
+      satelliteRoute.push(raduis);
     }   
 
     for(var i = 45; i < 135; i+= 0.5)
@@ -275,7 +302,7 @@ var option = {};
       raduis.push(end);
       revRaduis.push(-start);
       revRaduis.push(-end);
-      routes.push(raduis);
+      satelliteRoute.push(raduis);
     }   
 
     for(var i = 90; i < 180; i+= 0.5)
@@ -288,7 +315,7 @@ var option = {};
       raduis.push(end);
       revRaduis.push(-start);
       revRaduis.push(-end);
-      routes.push(raduis);
+      satelliteRoute.push(raduis);
     }   
 
     for(var i = 135; i < 225; i+= 0.5)
@@ -301,7 +328,7 @@ var option = {};
       raduis.push(end);
       revRaduis.push(-start);
       revRaduis.push(-end);
-      routes.push(raduis);
+      satelliteRoute.push(raduis);
     }   
 
     for(var i = 180; i < 270; i+= 0.5)
@@ -314,7 +341,7 @@ var option = {};
       raduis.push(end);
       revRaduis.push(-start);
       revRaduis.push(-end);
-      routes.push(raduis);
+      satelliteRoute.push(raduis);
     }   
 
     for(var i = 225; i < 315; i+= 0.5)
@@ -327,7 +354,7 @@ var option = {};
       raduis.push(end);
       revRaduis.push(-start);
       revRaduis.push(-end);
-      routes.push(raduis);
+      satelliteRoute.push(raduis);
     }
   }
 </script>
