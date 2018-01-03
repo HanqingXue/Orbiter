@@ -32,8 +32,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         Mq0 = 5
         Ma0 = 116.23
         MA0 = 10
-        v0 = 2500
-        a = 10
+        v0 = 5000
+        a = 30
         snr = 28
         Ri = 40000
         pj = 0.00001

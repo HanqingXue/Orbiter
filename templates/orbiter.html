@@ -196,6 +196,7 @@ var routes = [
       [126.23, 3.068833]
     ]
   ]
+var option = {};
 </script>
 <script type="text/javascript">
   $(function() {
@@ -206,7 +207,7 @@ var routes = [
 </script>
 <script type="text/javascript">
   function chartInit() {
-    var option = {
+    option = {
     backgroundColor: '#000',
     globe: {
         baseTexture: "{{ static_url('images/earth.jpeg')}}",
@@ -251,7 +252,6 @@ var routes = [
 </script>
 <script type="text/javascript">
   function sateillteInit() {
-
     for(var i = 0; i < 90; i+= 0.5)
     {
       var start = [i*1, 0];
@@ -338,6 +338,16 @@ var routes = [
     $('#missileLat').text(data['lat']);
   }
 </script>
+<script type="text/javascript">
+  function missilleRouteUpdate(lng, lat) {
+    routes[0][1][0] = lng;
+    routes[0][1][1] = lat;
+    option.data = routes;
+    option.globe.viewControl.targetCoord = [lng, lat]
+    console.log(option.globe.viewControl.targetCoord);
+    chart.setOption(option);
+  }
+</script>
 <script type="text/javascript">  
     var ws;  
     function onLoad(){  
@@ -350,6 +360,7 @@ var routes = [
               console.log("hello");
             } else {
               realTimeDataUpdate(data);
+              missilleRouteUpdate(data['lng'], data['lat']);
             }
         }
         ws.onclose = function(e) {
