@@ -35,9 +35,21 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         '''
         Args from frontend
         '''
+        '''
         Sa0 = 110
         print args
         Mq0 = float(args['Mq0'])
+        Ma0 = float(args['Ma0'])
+        MA0 = float(args['MA0'])
+        v0 = float(args['v0'])
+        a = float(args['a'])
+        snr = float(args['snr'])
+        Ri = float(args['Ri'])
+        pj = float(args['pj'])
+        '''
+        print message
+        Sa0 = 110
+        Mq0 = float(args['Mq0']) 
         Ma0 = float(args['Ma0'])
         MA0 = float(args['MA0'])
         v0 = float(args['v0'])
@@ -83,19 +95,22 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             no = detectornoise.getNET(RD)       
             SNR = St / (airn + no);
 
+            print LngMa
+
             P = probability.getP(snr, SNR, pj)  if RD < MR else 0
             if t == 0:
                 LatMq = 0
+                continue
 
             if t  % 20 == 0:
                 stat = {
-                    'xxx': 11,
-                    'prob': round(P * 100, 10),
-                    'lng': round(LngMa, 6),
-                    'lat': round(LatMq, 6)
+                'xxx': 11,
+                'prob': round(P * 100, 10),
+                'lng': round(LngMa, 6),
+                'lat': round(LatMq, 6)
                 }
 
-                time.sleep(1)
+                time.sleep(0.5)
                 self.write_message(json.dumps(stat))
             else:
                 continue

@@ -45,8 +45,8 @@
         </div>
       </nav>
     </div>
-    <div class="container">
-    	      <div class="col-md-4">
+    <div class="container row-fluid">
+    	<div class="col-md-4">
         <div id="overview" class="section">
             <div class="header">
                 <h5><i class="fa fa-desktop"></i> 参数</h5>
@@ -106,7 +106,7 @@
               <div class="row-fluid">
                   <div class="col-md-6">经度</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control" value=116.23 id="Ma0">
+                    <input class="form-control" value=126.23 id="Ma0">
                   </div>
               </div>
 
@@ -134,34 +134,12 @@
             </button>
         </div> <!-- .section -->
 
-        <div class="section">
-          <div class="header">
-            <h5><i class="fa fa-desktop"></i> 实时数据</h5>
-              <a href="javascript:void(0)">
-                <i class="fa fa-caret-down"></i>
-              </a>
-          </div>
-          <div class="body">
-          	<div class="row-fluid col-md-12">
-              <div class="col-md-5">探测概率</div>
-              <div class="col-md-7"><p id="prob">0%</p></div> 
-            </div>
-            <div class="row-fluid col-md-12">
-              <div class="col-md-5">导弹经度</div>
-              <div class="col-md-7"><p id="missileLng">-</p></div>
-            </div>
-            <div class="row-fluid col-md-12">
-              <div class="col-md-5">导弹纬度</div>
-              <div class="col-md-7"><p id="missileLat">-</p></div>
-            </div>
-          </div>
-        </div>
+
         <button class="btn btn-embossed btn-primary col-md-12 missile" id="orbitBtn">
           3D轨迹绘制
         </button>
       </div><!--/.col-md-->
 
-    <!-- /.container -->
       <div class="col-md-8">
         <div class="alert alert-warning " style="display: none">
           <a href="#" class="close" data-dismiss="alert">
@@ -180,6 +158,23 @@
       		  <div id="container" style="width: 700px;height: 700px"></div>
       	  </div>
         </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="section row-fluid">
+        <div class="header">
+          <h5><i class="fa fa-desktop"></i> 实时数据</h5>
+            <a href="javascript:void(0)">
+              <i class="fa fa-caret-down"></i>
+            </a>
+        </div>
+        <div class="body ">
+          <div class="row-fluid col-md-12" ><b>卫星数据</b></div>
+          <div class="row-fluid col-md-12" ><b>导弹数据</b></div>
+        </div>
+      </div>
+  </div>
+
 </body>
 <script type="text/javascript">
 
@@ -250,6 +245,36 @@ var series = []
         data: routes
       }
     );
+
+    series.push({
+        name: 'sateillteOne',
+        type: 'scatter3D',
+        coordinateSystem: 'globe',
+        zlevel: 8,
+        rippleEffect: {
+            brushType: 'stroke'
+        },
+        label: {
+            normal: {
+                show: true,
+                position: 'right',
+                formatter: '{b}'
+            }
+        },
+        symbolSize:30, // function (val) {return val[2] / 8; },
+
+        itemStyle: {
+            normal: {
+                areaColor:'#fff',
+                color: '#3A5FCD'
+            }
+        },
+        data: [{
+                name: '卫星1',
+                value: [116, 0]}]
+      }
+    );
+
     option = {
       backgroundColor: '#000',
       globe: {
@@ -367,6 +392,9 @@ var series = []
 </script>
 <script type="text/javascript">
   function missilleRouteUpdate(lng, lat) {
+    console.log(lng);
+    console.log(lat);
+    console.log(routes);
     routes[0][1][0] = lng;
     routes[0][1][1] = lat;
     option.data = routes;
