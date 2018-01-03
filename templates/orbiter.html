@@ -82,50 +82,50 @@
               <div class="row-fluid" >
                     <div class="col-md-6">初速度</div>
                     <div class="col-md-6 missile">
-                      <input class="form-control" value="v0" id="v0">
+                      <input class="form-control" value=5000 id="v0">
                     </div> <!-- .span8 -->
               </div> <!-- .row-fluid -->
               <div class="row-fluid" >
                     <div class="col-md-6">仰角</div>
                     <div class="col-md-6 missile">
-                      <input class="form-control" value="a" id="a">
+                      <input class="form-control" value=30 id="a">
                     </div> <!-- .span8 -->
               </div> <!-- .row-fluid -->
               <div class="row-fluid">
                   <div class="col-md-6">方位角</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control" value="MA0" id="MA0">
+                    <input class="form-control" value=10 id="MA0">
                   </div>
               </div>
               <div class="row-fluid">
                   <div class="col-md-6">纬度</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control" value="Mq0" id="Mq0">
+                    <input class="form-control" value=5 id="Mq0">
                   </div>
               </div>
               <div class="row-fluid">
                   <div class="col-md-6">经度</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control" value="Ma0" id="Ma0">
+                    <input class="form-control" value=116.23 id="Ma0">
                   </div>
               </div>
 
               <div class="row-fluid">
                   <div class="col-md-6">虚警概率</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control" value="pj" id="pj">
+                    <input class="form-control" value=0.00001 id="pj">
                   </div>
               </div>
               <div class="row-fluid">
                   <div class="col-md-6">尾焰燃烧强度</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control" value="Ri" id="Ri">
+                    <input class="form-control" value=40000 id="Ri">
                   </div>
               </div>
               <div class="row-fluid">
                   <div class="col-md-6">信噪比阈值</div>
                   <div class="col-md-6 missile">
-                    <input class="form-control" value="snr" id="snr">
+                    <input class="form-control" value=28 id="snr">
                   </div>
               </div>
             </div> <!-- .body -->
@@ -344,7 +344,6 @@ var option = {};
     routes[0][1][1] = lat;
     option.data = routes;
     option.globe.viewControl.targetCoord = [lng, lat]
-    console.log(option.globe.viewControl.targetCoord);
     chart.setOption(option);
   }
 </script>
@@ -357,7 +356,7 @@ var option = {};
             console.log(e.data);
             var data = JSON.parse(e.data);
             if( typeof(data['prob']) == 'undefined') {
-              console.log("hello");
+              
             } else {
               realTimeDataUpdate(data);
               missilleRouteUpdate(data['lng'], data['lat']);
@@ -365,10 +364,31 @@ var option = {};
         }
         ws.onclose = function(e) {
            //reconnect();
+           console.log('Websocket disconnection!');
         }  
     }  
-    function sendMsg(){  
-        ws.send("hehe");  
+    function sendMsg(){
+        var args = {
+          'v0': null,
+          'a': null,
+          'MA0': null,
+          'Mq0': null,
+          'Ma0': null,
+          'pj': null,
+          'Ri': null,
+          'snr': null
+        };
+        alert(typeof($('#Ma0').val()));
+        routes[0][0][0] = parseFloat($('#Ma0').val());
+        routes[0][0][1] = parseFloat($('#Mq0').val());
+        option.data = routes;
+
+        for(var key in args) {
+          //console.log(key);
+          args[key] = $('#' + key).val()
+        }
+
+        ws.send(JSON.stringify(args));  
     }  
 </script> 
 </html>

@@ -1,3 +1,5 @@
+#coding=utf-8
+
 import tornado.web  
 import tornado.websocket  
 import tornado.httpserver  
@@ -16,33 +18,38 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         self.write_message({'msg': "Established!"})
         pass
   
-    def on_message(self, message): 
+    def on_message(self, message):
         import clr
         import json
         import sys
         import System
 
+        args = json.loads(message)
+        print float(args['v0'])
         cur_space = sys.path[0]
         sys.path.append('./helper')
         clr.FindAssembly('Simulation.dll')
 
         from Simulation import *
         import Simulation
+        '''
+        Args from frontend
+        '''
         Sa0 = 110
-        Mq0 = 5
-        Ma0 = 116.23
-        MA0 = 10
-        v0 = 5000
-        a = 30
-        snr = 28
-        Ri = 40000
-        pj = 0.00001
+        print args
+        Mq0 = float(args['Mq0'])
+        Ma0 = float(args['Ma0'])
+        MA0 = float(args['MA0'])
+        v0 = float(args['v0'])
+        a = float(args['a'])
+        snr = float(args['snr'])
+        Ri = float(args['Ri'])
+        pj = float(args['pj'])
+        '''
+        Globe varibes Init 
+        '''
         LngMa = 0
         LatMq = 0
-        '''
-        Globe varibes
-        '''
-        f = open('root', 'w')
         DR = 0.01745329252 
         P = 0   
         track = Track(0, 0)
@@ -76,14 +83,10 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             no = detectornoise.getNET(RD)       
             SNR = St / (airn + no);
 
-            f.write(str(LngMa) + '\t' + str(LatMq) +'\n')
-
-
             P = probability.getP(snr, SNR, pj)  if RD < MR else 0
             if t == 0:
                 LatMq = 0
-            #lng
-            #lat
+
             if t  % 20 == 0:
                 stat = {
                     'xxx': 11,
@@ -97,7 +100,5 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             else:
                 continue
 
-        f.close()
-  
     def on_close(self):  
         pass
