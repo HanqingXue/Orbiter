@@ -32,7 +32,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         Mq0 = 5
         Ma0 = 116.23
         MA0 = 10
-        v0 = 1000
+        v0 = 2500
         a = 10
         snr = 28
         Ri = 40000
@@ -80,6 +80,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 
             P = probability.getP(snr, SNR, pj)  if RD < MR else 0
+            if t == 0:
+                LatMq = 0
             #lng
             #lat
             if t  % 20 == 0:

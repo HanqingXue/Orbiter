@@ -156,7 +156,7 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-embossed btn-primary col-md-12 missile" id="orbit">
+        <button class="btn btn-embossed btn-primary col-md-12 missile" id="orbitBtn">
           3D轨迹绘制
         </button>
       </div><!--/.col-md-->
@@ -182,91 +182,31 @@
         </div>
 </body>
 <script type="text/javascript">
+
+  /*
+    Globe variable : 
+      chart : The container show the real lnglat data on the 
+        global earth.
+      routes ： The array stores the data of missiles and sateilltes. 
+  */
 var chart = echarts.init(document.getElementById('container'));
-/*
- 点的格式是[经度， 维度]
-*/
 var routes = [
-  [[126.23, 4.99686889413], [126.23, 4.21738]]]
-for(var i = 0; i < 90; i+= 0.5)
-{
-  var start = [i*1, 0];
-  var end   = [90 + i, 0];
-  var raduis = [];
-  var revRaduis = []
-  raduis.push(start);
-  raduis.push(end);
-  revRaduis.push(-start);
-  revRaduis.push(-end);
-  routes.push(raduis);
-}
-
-for(var i = 45; i < 135; i+= 0.5)
-{
-  var start = [i*1, 0];
-  var end   = [90 + i, 0];
-  var raduis = [];
-  var revRaduis = []
-  raduis.push(start);
-  raduis.push(end);
-  revRaduis.push(-start);
-  revRaduis.push(-end);
-  routes.push(raduis);
-}
-
-for(var i = 90; i < 180; i+= 0.5)
-{
-  var start = [i*1, 0];
-  var end   = [90 + i, 0];
-  var raduis = [];
-  var revRaduis = []
-  raduis.push(start);
-  raduis.push(end);
-  revRaduis.push(-start);
-  revRaduis.push(-end);
-  routes.push(raduis);
-}
-
-for(var i = 135; i < 225; i+= 0.5)
-{
-  var start = [i*1, 0];
-  var end   = [90 + i, 0];
-  var raduis = [];
-  var revRaduis = []
-  raduis.push(start);
-  raduis.push(end);
-  revRaduis.push(-start);
-  revRaduis.push(-end);
-  routes.push(raduis);
-}
-
-for(var i = 180; i < 270; i+= 0.5)
-{
-  var start = [i*1, 0];
-  var end   = [90 + i, 0];
-  var raduis = [];
-  var revRaduis = []
-  raduis.push(start);
-  raduis.push(end);
-  revRaduis.push(-start);
-  revRaduis.push(-end);
-  routes.push(raduis);
-}
-
-for(var i = 225; i < 315; i+= 0.5)
-{
-  var start = [i*1, 0];
-  var end   = [90 + i, 0];
-  var raduis = [];
-  var revRaduis = []
-  raduis.push(start);
-  raduis.push(end);
-  revRaduis.push(-start);
-  revRaduis.push(-end);
-  routes.push(raduis);
-}
-
-chart.setOption({
+    [
+      [126.23, 4.99686889413], 
+      [126.23, 3.068833]
+    ]
+  ]
+</script>
+<script type="text/javascript">
+  $(function() {
+    sateillteInit();
+    chartInit();
+    $('#orbitBtn').attr('disabled', true);
+  });
+</script>
+<script type="text/javascript">
+  function chartInit() {
+    var option = {
     backgroundColor: '#000',
     globe: {
         baseTexture: "{{ static_url('images/earth.jpeg')}}",
@@ -305,8 +245,98 @@ chart.setOption({
                 symbolSize: 5,
         },
         data: routes
+    }}
+    chart.setOption(option);
+  }
+</script>
+<script type="text/javascript">
+  function sateillteInit() {
+
+    for(var i = 0; i < 90; i+= 0.5)
+    {
+      var start = [i*1, 0];
+      var end   = [90 + i, 0];
+      var raduis = [];
+      var revRaduis = []
+      raduis.push(start);
+      raduis.push(end);
+      revRaduis.push(-start);
+      revRaduis.push(-end);
+      routes.push(raduis);
+    }   
+
+    for(var i = 45; i < 135; i+= 0.5)
+    {
+      var start = [i*1, 0];
+      var end   = [90 + i, 0];
+      var raduis = [];
+      var revRaduis = []
+      raduis.push(start);
+      raduis.push(end);
+      revRaduis.push(-start);
+      revRaduis.push(-end);
+      routes.push(raduis);
+    }   
+
+    for(var i = 90; i < 180; i+= 0.5)
+    {
+      var start = [i*1, 0];
+      var end   = [90 + i, 0];
+      var raduis = [];
+      var revRaduis = []
+      raduis.push(start);
+      raduis.push(end);
+      revRaduis.push(-start);
+      revRaduis.push(-end);
+      routes.push(raduis);
+    }   
+
+    for(var i = 135; i < 225; i+= 0.5)
+    {
+      var start = [i*1, 0];
+      var end   = [90 + i, 0];
+      var raduis = [];
+      var revRaduis = []
+      raduis.push(start);
+      raduis.push(end);
+      revRaduis.push(-start);
+      revRaduis.push(-end);
+      routes.push(raduis);
+    }   
+
+    for(var i = 180; i < 270; i+= 0.5)
+    {
+      var start = [i*1, 0];
+      var end   = [90 + i, 0];
+      var raduis = [];
+      var revRaduis = []
+      raduis.push(start);
+      raduis.push(end);
+      revRaduis.push(-start);
+      revRaduis.push(-end);
+      routes.push(raduis);
+    }   
+
+    for(var i = 225; i < 315; i+= 0.5)
+    {
+      var start = [i*1, 0];
+      var end   = [90 + i, 0];
+      var raduis = [];
+      var revRaduis = []
+      raduis.push(start);
+      raduis.push(end);
+      revRaduis.push(-start);
+      revRaduis.push(-end);
+      routes.push(raduis);
     }
-});
+  }
+</script>
+<script type="text/javascript">
+  function realTimeDataUpdate(data) {
+    $('#prob').text(data['prob'] + '%');
+    $('#missileLng').text(data['lng']);
+    $('#missileLat').text(data['lat']);
+  }
 </script>
 <script type="text/javascript">  
     var ws;  
@@ -319,9 +349,7 @@ chart.setOption({
             if( typeof(data['prob']) == 'undefined') {
               console.log("hello");
             } else {
-              $('#prob').text(data['prob'] + '%');
-              $('#missileLng').text(data['lng']);
-              $('#missileLat').text(data['lat']);
+              realTimeDataUpdate(data);
             }
         }
         ws.onclose = function(e) {
