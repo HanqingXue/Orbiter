@@ -25,7 +25,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         import System
 
         args = json.loads(message)
-        print float(args['v0'])
         cur_space = sys.path[0]
         sys.path.append('./helper')
         clr.FindAssembly('Simulation.dll')
@@ -35,20 +34,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         '''
         Args from frontend
         '''
-        '''
-        Sa0 = 110
-        print args
-        Mq0 = float(args['Mq0'])
-        Ma0 = float(args['Ma0'])
-        MA0 = float(args['MA0'])
-        v0 = float(args['v0'])
-        a = float(args['a'])
-        snr = float(args['snr'])
-        Ri = float(args['Ri'])
-        pj = float(args['pj'])
-        '''
-        print message
-        Sa0 = 110
+        Sa0 = float(args['sat1'])
         Mq0 = float(args['Mq0']) 
         Ma0 = float(args['Ma0'])
         MA0 = float(args['MA0'])
@@ -84,7 +70,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             Mr = location.getMr(MA0*DR, MX, MY)          
             
             Mq = location.getMq((90-Mq0)*DR, MA0*DR, MX, MY)   
-            Ma = location.getMa((90+Ma0)*DR, MA0*DR)  
+            Ma = location.getMa((90+Ma0)*DR, (90-Mq0)*DR, MA0*DR, MX, MY)  
             LngMa = transformsg.getLng(Ma / DR)
             LatMq = transformsg.getLat(Mq / DR)
             Ele = elevation.getElevation(Mr)
@@ -105,9 +91,20 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             if t  % 20 == 0:
                 stat = {
                 'xxx': 11,
-                'prob': round(P * 100, 10),
+                'prob': round(P * 100, 6),
                 'lng': round(LngMa, 6),
-                'lat': round(LatMq, 6)
+                'lat': round(LatMq, 6),
+                'Sa': round(Sa, 4),
+                'MR': round(MR, 2),
+                'St': round(St*pow(10, 12), 2),
+                'airn': airn,
+                'no': round(no*pow(10, 12), 2),
+                'MX': round(MX, 3),
+                'MY': round(MY, 3),
+                'Mr': round(Mr, 2),
+                'Mq': round(Mq, 2),
+                'Ma': round(Ma, 2),
+                'RD': round(RD, 2)
                 }
 
                 time.sleep(0.5)

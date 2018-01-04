@@ -61,19 +61,19 @@
               <div class="row-fluid" >
                     <div class="col-md-7">同步卫星1方位角</div>
                     <div class="col-md-5 missile">
-                      <input class="form-control">
+                      <input class="form-control" id="sat1">
                     </div> <!-- .span8 -->
               </div> <!-- .row-fluid -->
               <div class="row-fluid">
                 <div class="col-md-7">同步卫星2方位角</div>
                 <div class="col-md-5 missile">
-                      <input class="form-control">
+                      <input class="form-control" id="sat2">
                 </div> 
               </div>
               <div class="row-fluid">
                 <div class="col-md-7">同步卫星3方位角</div>
                 <div class="col-md-5 missile">
-                      <input class="form-control">
+                      <input class="form-control" id="sat3">
                 </div> 
               </div>
               <div class="row-fluid">
@@ -174,48 +174,48 @@
             <div class="col-md-3">探测概率</div>
             <div class="col-md-3"><p id="prob">0%</p></div>
             <div class="col-md-3">方位角</div>
-            <div class="col-md-3">-</div>
+            <div class="col-md-3" ><p id="Sa">0°</p></div>
           </div>
           <div class="row-fluid col-md-12">
             <div class="col-md-3">最大探测距离</div>
-            <div class="col-md-3">-</div>
+            <div class="col-md-3" ><p id="MR">0KM</p></div>
             <div class="col-md-3">接收红外辐射强度</div>
-            <div class="col-md-3">-</div>
+            <div class="col-md-3"><p id="St">0 W/Sr</p></div>
           </div>
           <div class="row-fluid col-md-12">
             <div class="col-md-3">接收大气背景噪声</div>
-            <div class="col-md-3"><p id="prob">-</p></div>
+            <div class="col-md-3"><p id="airn">0DB</p></div>
             <div class="col-md-3">卫星自身噪声</div>
-            <div class="col-md-3">-</div>
+            <div class="col-md-3" id="no">0DB</div>
           </div>
           <div class="row-fluid col-md-12" ><b>导弹数据</b></div>
           <div class="row-fluid col-md-12">
             <div class="col-md-3">导弹纬度</div>
-            <div class="col-md-3"><p id="missileLng"></p></div>
+            <div class="col-md-3"><p id="missileLng">-°</p></div>
             <div class="col-md-3">导弹经度</div>
-            <div class="col-md-3"><p id="missileLat"></p></div>
+            <div class="col-md-3"><p id="missileLat">-°</p></div>
           </div>
           <div class="col-md-12 row-fluid">
             <div class="col-md-3">坐标系水平位移</div>
-            <div class="col-md-3">-</div>
+            <div class="col-md-3"><p id="MX">0KM</p></div>
             <div class="col-md-3">坐标系竖直位移</div>
-            <div class="col-md-3">-</div>
+            <div class="col-md-3"><p id="MY">0KM</p></div>
           </div>
           <div class="col-md-12 row-fluid">
             <div class="col-md-3">球坐标</div>
-            <div class="col-md-3">-</div>
-            <div class="col-md-3">-</div>
-            <div class="col-md-3">-</div>
+            <div class="col-md-3"><p id="Mr">0KM</p></div>
+            <div class="col-md-3"><p id="Mq">0rad</p></div>
+            <div class="col-md-3"><p id="Ma">0rad</p></div>
           </div>
           <div class="col-md-12 row-fluid">
             <div class="col-md-3">与卫星1距离</div>
-            <div class="col-md-3"></div>
+            <div class="col-md-3"><p id="RD">0KM</p></div>
             <div class="col-md-3">与卫星2距离</div> 
-            <div class="col-md-3"></div>
+            <div class="col-md-3">0KM</div>
           </div>
           <div class="col-md-12 row-fluid">
             <div class="col-md-3">与卫星3距离</div>
-            <div class="col-md-3">-</div>
+            <div class="col-md-3">0KM</div>
           </div>
         </div>
       </div>
@@ -289,35 +289,6 @@ var series = []
           symbolSize: 5,
         },
         data: routes
-      }
-    );
-
-    series.push({
-        name: 'sateillteOne',
-        type: 'scatter3D',
-        coordinateSystem: 'globe',
-        zlevel: 8,
-        rippleEffect: {
-            brushType: 'stroke'
-        },
-        label: {
-            normal: {
-                show: true,
-                position: 'right',
-                formatter: '{b}'
-            }
-        },
-        symbolSize:30, // function (val) {return val[2] / 8; },
-
-        itemStyle: {
-            normal: {
-                areaColor:'#fff',
-                color: '#3A5FCD'
-            }
-        },
-        data: [{
-                name: '卫星1',
-                value: [116, 0]}]
       }
     );
 
@@ -432,15 +403,22 @@ var series = []
 <script type="text/javascript">
   function realTimeDataUpdate(data) {
     $('#prob').text(data['prob'] + '%');
-    $('#missileLng').text(data['lng']);
-    $('#missileLat').text(data['lat']);
+    $('#missileLng').text(data['lng'] + '°');
+    $('#missileLat').text(data['lat'] + '°');
+    $('#Sa').text(data['Sa'] + '°');
+    $('#MR').text(data['MR'] + 'KM');
+    $('#St').text(data['St'] + 'e-12W/Sr');
+    $('#airn').text(data['airn'] + 'DB');
+    $('#no').text(data['no'] + 'e-12DB');
+    $('#MX').text(data['MX'] + 'KM');
+    $('#MY').text(data['MY'] + 'KM');
+    $('#Mr').text(data['Mr'] + 'KM');
+    $('#Mq').text(data['Mq'] + 'rad');
+    $('#Ma').text(data['Ma'] + 'rad');
   }
 </script>
 <script type="text/javascript">
   function missilleRouteUpdate(lng, lat) {
-    console.log(lng);
-    console.log(lat);
-    console.log(routes);
     routes[0][1][0] = lng;
     routes[0][1][1] = lat;
     option.data = routes;
@@ -477,12 +455,17 @@ var series = []
           'Ma0': null,
           'pj': null,
           'Ri': null,
-          'snr': null
+          'snr': null,
+          'sat1': null
         };
-        alert(typeof($('#Ma0').val()));
+
         routes[0][0][0] = parseFloat($('#Ma0').val());
         routes[0][0][1] = parseFloat($('#Mq0').val());
         option.data = routes;
+
+        for(var i = 1; i < 4; i ++) {
+          updateSateillte("卫星"+i, parseFloat($('#sat'+i).val()));
+        }
 
         for(var key in args) {
           //console.log(key);
@@ -491,5 +474,38 @@ var series = []
 
         ws.send(JSON.stringify(args));  
     }  
-</script> 
+</script>
+<script type="text/javascript">
+  function updateSateillte(name, lng) {
+    series.push({
+        name: 'sateillteOne',
+        type: 'scatter3D',
+        coordinateSystem: 'globe',
+        zlevel: 8,
+        rippleEffect: {
+            brushType: 'stroke'
+        },
+        label: {
+            normal: {
+                show: true,
+                position: 'right',
+                formatter: '{b}'
+            }
+        },
+        symbolSize:30, 
+
+        itemStyle: {
+            normal: {
+                areaColor:'#fff',
+                color: '#3A5FCD'
+            }
+        },
+        data: [{
+                name: name,
+                value: [lng, 0]}]
+      }
+    );
+  chart.setOption(option);
+  }
+</script>
 </html>
