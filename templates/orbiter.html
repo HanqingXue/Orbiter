@@ -171,8 +171,14 @@
         <div class="body ">
           <div class="row-fluid col-md-12" ><b>卫星数据</b></div>
           <div class="row-fluid col-md-12">
-            <div class="col-md-3">探测概率</div>
+            <div class="col-md-3">卫星1探测概率</div>
             <div class="col-md-3"><p id="prob">0%</p></div>
+            <div class="col-md-3">卫星2探测概率</div>
+            <div class="col-md-3"><p id="prob2">0%</p></div>
+          </div>
+          <div class="row-fluid col-md-12">
+            <div class="col-md-3">卫星3探测概率</div>
+            <div class="col-md-3" ><p id="prob3">0%</p></div>
             <div class="col-md-3">方位角</div>
             <div class="col-md-3" ><p id="Sa">0°</p></div>
           </div>
@@ -403,6 +409,8 @@ var series = []
 <script type="text/javascript">
   function realTimeDataUpdate(data) {
     $('#prob').text(data['prob'] + '%');
+    $('#prob2').text(data['prob2'] + '%');
+    $('#prob3').text(data['prob3'] + '%');
     $('#missileLng').text(data['lng'] + '°');
     $('#missileLat').text(data['lat'] + '°');
     $('#Sa').text(data['Sa'] + '°');

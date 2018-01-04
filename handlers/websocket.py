@@ -107,6 +107,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 stat = {
                 'xxx': 11,
                 'prob': round(P * 100, 6),
+                'prob2': round(P_two * 100, 6),
+                'prob3': round(P_three * 100, 6),
                 'lng': round(LngMa, 6),
                 'lat': round(LatMq, 6),
                 'Sa': round(Sa, 4),
