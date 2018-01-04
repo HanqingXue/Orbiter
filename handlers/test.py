@@ -36,7 +36,7 @@ class TestDll(object):
 			MY = trajectory.gettryY(v0, a*DR, t)        
 			Mr = location.getMr(MA0*DR, MX, MY)          
 			Mq = location.getMq(Mq0*DR, MA0*DR, MX, MY)   
-			Ma = location.getMa(Ma0*DR, MA0*DR)    
+			Ma = location.getMa((90+Ma0)*DR, (90-Mq0)*DR, MA0*DR, MX, MY)    
 			RD = distance.getRD(Sa, Ma, Mq)           
 			MR = maxDD.getRmax(snr, Ri)            
 			St = strength.getS(Ri, RD)                    
@@ -52,8 +52,5 @@ if __name__ == "__main__":
 	series = dict()
 	for i in range(0, 3):
 		p = simulation.main(80, 70, 60, 10, 5000, 30, 28, 40000, 0.00001, i)
-		series[i] = p
+		print p
 
-	f = open('series.json', 'w')
-	f.write(json.dumps(series))
-	f.close()

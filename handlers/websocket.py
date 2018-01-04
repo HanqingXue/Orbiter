@@ -35,6 +35,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         Args from frontend
         '''
         Sa0 = float(args['sat1'])
+        Sa1 = float(args['sat2'])
+        Sa2 = float(args['sat3'])
         Mq0 = float(args['Mq0']) 
         Ma0 = float(args['Ma0'])
         MA0 = float(args['MA0'])
@@ -63,27 +65,40 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         elevation = Elevation(0)
 
         for t in range(0, 1000+1):
-            Sa = track.getSa((90+Sa0)*DR, t) 
-            LngSa = transformsg.getLng(Sa/DR)          
-            MX = trajectory.gettryX(v0, a*DR, t)        
-            MY = trajectory.gettryY(v0, a*DR, t)        
-            Mr = location.getMr(MA0*DR, MX, MY)          
+            MR = maxDD.getRmax(snr, Ri)  # 最大探测距离         
+            MX = trajectory.gettryX(v0, a*DR, t)# 火箭水平距离        
+            MY = trajectory.gettryY(v0, a*DR, t)# 火箭竖直距离        
+            Mr = location.getMr(MA0*DR, MX, MY)# 火箭球坐标第一位        
+            Mq = location.getMq((90-Mq0)*DR, MA0*DR, MX, MY) # 火箭球坐标第二位   
+            Ma = location.getMa((90+Ma0)*DR, (90-Mq0)*DR, MA0*DR, MX, MY) # 火箭球坐标第三位  
+            LngMa = transformsg.getLng(Ma / DR)# 火箭的经度
+            LatMq = transformsg.getLat(Mq / DR)# 火箭的纬度
+            Ele = elevation.getElevation(Mr)# 火箭的高度
             
-            Mq = location.getMq((90-Mq0)*DR, MA0*DR, MX, MY)   
-            Ma = location.getMa((90+Ma0)*DR, (90-Mq0)*DR, MA0*DR, MX, MY)  
-            LngMa = transformsg.getLng(Ma / DR)
-            LatMq = transformsg.getLat(Mq / DR)
-            Ele = elevation.getElevation(Mr)
-            RD = distance.getRD(Sa, Ma, Mq)           
-            MR = maxDD.getRmax(snr, Ri)            
+            Sa = track.getSa((90+Sa0)*DR, t)
+            RD = distance.getRD(Sa, Ma, Mq) # 火箭与卫星1的距离  
             St = strength.getS(Ri, RD)                    
             airn = airnoise.getairn(RD)           
             no = detectornoise.getNET(RD)       
             SNR = St / (airn + no);
-
-            print LngMa
-
             P = probability.getP(snr, SNR, pj)  if RD < MR else 0
+
+            Sa_two = track.getSa((90+Sa1)*DR, t)
+            RD_two = distance.getRD(Sa_two, Ma, Mq)
+            St_two = strength.getS(Ri, RD_two)
+            airn_two = airnoise.getairn(RD_two)
+            no_two = detectornoise.getNET(RD_two)
+            SNR_two = St_two / (airn_two + no_two);
+            P_two = probability.getP(snr, SNR_two, pj) if RD_two < MR else 0
+
+            Sa_three = track.getSa((90+Sa2)*DR, t)
+            RD_three = distance.getRD(Sa_three, Ma, Mq)
+            St_three = strength.getS(Ri, RD_three)
+            airn_three = airnoise.getairn(RD_three)
+            no_three = detectornoise.getNET(RD_three)
+            SNR_three = St_three / (airn_three + no_three);
+            P_three = probability.getP(snr, SNR_three, pj) if RD_three < MR else 0
+
             if t == 0:
                 LatMq = 0
                 continue
@@ -104,7 +119,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 'Mr': round(Mr, 2),
                 'Mq': round(Mq, 2),
                 'Ma': round(Ma, 2),
-                'RD': round(RD, 2)
+                'RD': round(RD, 2),
+                'RD2': round(RD_two, 2),
+                'RD3': round(RD_three, 2)
                 }
 
                 time.sleep(0.5)
