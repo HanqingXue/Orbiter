@@ -1,16 +1,1 @@
-{
-	"timeBins": [
-		{
-		"data": [{
-			"missile": "hwasong-12",
-			"facility": "beijing",
-			"landing": "unknown",
-			"apogee": 1000,
-			"distance": 2000,
-			"bearing": 90,
-			"outcome": "success"
-		}],
-		"year": 2017
-		}
-	]
-}
+{"timeBins": [{"data": [{"bearing": 170.0, "facility": "beijing", "landing": "unknown", "missile": "hwasong-12", "outcome": "success", "apogee": "unknown", "distance": 1336.6615286706817}], "year": 2017}]}

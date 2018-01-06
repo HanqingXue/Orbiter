@@ -9,6 +9,7 @@ import random
 import time
 import sys
 import os
+import updateinfo
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):  
     def check_origin(self, origin):  
@@ -21,6 +22,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         import clr
         import json
+        from updateinfo import *
+        from distanceHelper import *
         import sys
         import System
 
@@ -131,5 +134,12 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             else:
                 continue
 
+        write_start_point(Mq0, Ma0)
+        dist= get_distance_hav(Ma0, Mq0, round(LngMa, 6),round(LatMq, 6)) 
+        #print round(dist, 4)
+        if MA0 < 90:
+            theta = 180 - MA0 
+            
+        write_missile(dist, theta)
     def on_close(self):  
         pass
